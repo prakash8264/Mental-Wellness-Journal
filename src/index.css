@@ -1,0 +1,234 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* Theme Tokens — Exact Match from uupm.cc Educational Platform Image */
+    --bg-cream: #F9F3EA;      /* Exact Warm Paper Off-White Background */
+    --bg-card: #FFFFFF;       /* Solid White Floating Cards */
+    --text: #1E293B;          /* Crisp Charcoal Dark Text */
+    --text-muted: #64748B;    /* Muted Slate Text */
+    --border: #1E293B;        /* Thick Dark Outline Stroke */
+
+    /* Colors from Screenshot */
+    --cta: #22C55E;           /* Vibrant Emerald Green ("Start Free", "Continue Learning") */
+    --cta-hover: #16A34A;
+    --secondary: #A5F3FC;     /* Soft Sky Blue ("Browse Courses") */
+    --accent-mint: #A7F3D0;   /* Mint Green Eyebrow Pill ("• New: AI-Powered Learning") */
+    --accent-pink: #FFB7B2;   /* Soft Pink/Peach Badge (Target icon badge) */
+    --accent-yellow: #FEF08A; /* Soft Yellow Star Badge */
+    --accent-purple: #E9D5FF; /* Soft Lavender Books Badge */
+    --primary: #FEF08A;       /* Warm Yellow Highlight */
+  }
+
+  .dark {
+    /* Dark Mode Match */
+    --bg-cream: #0F172A;
+    --bg-card: #1E293B;
+    --text: #F8FAFC;
+    --text-muted: #94A3B8;
+    --border: #334155;
+
+    --cta: #10B981;
+    --cta-hover: #059669;
+    --secondary: #0284C7;
+    --accent-mint: #047857;
+    --accent-pink: #BE123C;
+    --accent-yellow: #B45309;
+    --accent-purple: #6D28D9;
+    --primary: #EAB308;
+  }
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-cream);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+/* Neo-Brutalist 3px Outline & Hard 3D Shadows */
+.border-3 {
+  border-width: 3px;
+}
+
+.clay-card {
+  background-color: var(--bg-card);
+  border: 3px solid var(--border);
+  border-radius: 1.75rem;
+  box-shadow: 4px 4px 0px 0px var(--border);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clay-card-hover {
+  cursor: pointer;
+}
+
+.clay-card-hover:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px var(--border);
+}
+
+.clay-card-hover:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px 0px var(--border);
+}
+
+/* Buttons matching the image */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--cta);
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1.25rem;
+  border: 3px solid var(--border);
+  box-shadow: 4px 4px 0px 0px var(--border);
+  transition: all 0.15s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-primary:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px var(--border);
+}
+
+.btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px 0px var(--border);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--secondary);
+  color: var(--text);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1.25rem;
+  border: 3px solid var(--border);
+  box-shadow: 4px 4px 0px 0px var(--border);
+  transition: all 0.15s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-secondary:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px var(--border);
+}
+
+.btn-secondary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px 0px var(--border);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cta);
+  border: 2px solid var(--border);
+  border-radius: 9999px;
+}
+
+/* React Calendar Styling */
+.react-calendar {
+  width: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  font-family: var(--font-body) !important;
+}
+
+.react-calendar__navigation {
+  display: flex !important;
+  margin-bottom: 1rem !important;
+}
+
+.react-calendar__navigation button {
+  min-width: 44px !important;
+  background: var(--bg-card) !important;
+  border: 2px solid var(--border) !important;
+  box-shadow: 2px 2px 0px 0px var(--border) !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: var(--text) !important;
+  border-radius: 12px !important;
+  transition: all 0.15s ease !important;
+}
+
+.react-calendar__navigation button:hover {
+  background: var(--secondary) !important;
+  transform: translate(-1px, -1px) !important;
+}
+
+.react-calendar__month-view__weekdays {
+  text-align: center !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  color: var(--text-muted) !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none !important;
+}
+
+.react-calendar__tile {
+  max-width: 100% !important;
+  padding: 0.85em 0.5em !important;
+  background: none !important;
+  text-align: center !important;
+  line-height: 1.2 !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: var(--text) !important;
+  border-radius: 14px !important;
+  border: 2px solid transparent !important;
+  transition: all 0.15s ease !important;
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background: var(--secondary) !important;
+  border-color: var(--border) !important;
+  box-shadow: 2px 2px 0px 0px var(--border) !important;
+}
+
+.react-calendar__tile--now {
+  background: var(--accent-mint) !important;
+  border-color: var(--border) !important;
+  box-shadow: 2px 2px 0px 0px var(--border) !important;
+  font-weight: 800 !important;
+}
+
+.react-calendar__tile--active {
+  background: var(--cta) !important;
+  color: #FFFFFF !important;
+  border-color: var(--border) !important;
+  box-shadow: 3px 3px 0px 0px var(--border) !important;
+}
