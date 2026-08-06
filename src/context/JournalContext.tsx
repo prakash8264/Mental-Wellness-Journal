@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { JournalEntry, MoodLog, MoodType, AppSettings, Quote } from '@/types';
 import { storageService } from '@/services/storageService';
 import { quoteService } from '@/services/quoteService';
-import { getTodayDateString, getCurrentTimeString, calculateStreak } from '@/utils/dateUtils';
+import { getTodayDateString, getCurrentTimeString } from '@/utils/dateUtils';
 import { calculateWordAndCharCount } from '@/utils/moodUtils';
 
 interface JournalContextType {
@@ -11,7 +11,6 @@ interface JournalContextType {
   settings: AppSettings;
   favouriteQuotes: Quote[];
   todayMood: MoodLog | undefined;
-  streakDays: number;
   dailyQuote: Quote | null;
   quoteLoading: boolean;
   
@@ -61,14 +60,6 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const todayStr = getTodayDateString();
   const todayMoods = moodLogs.filter((m) => m.date === todayStr);
   const todayMood = todayMoods.length > 0 ? todayMoods[0] : undefined;
-
-  const allActivityDates = Array.from(
-    new Set([
-      ...entries.map((e) => e.date),
-      ...moodLogs.map((m) => m.date),
-    ])
-  );
-  const streakDays = calculateStreak(allActivityDates);
 
   // Sync to storage on updates
   useEffect(() => {
@@ -199,7 +190,6 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         settings,
         favouriteQuotes,
         todayMood,
-        streakDays,
         dailyQuote,
         quoteLoading,
         fetchDailyQuote,

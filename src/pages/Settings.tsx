@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   HiOutlineCog, 
   HiOutlineSun, 
@@ -7,7 +7,8 @@ import {
   HiOutlineHeart,
   HiOutlineTrash,
   HiOutlineSave,
-  HiOutlineUser
+  HiOutlineUser,
+  HiCheck
 } from 'react-icons/hi';
 import { useTheme } from '@/hooks/useTheme';
 import { useJournalContext } from '@/context/JournalContext';
@@ -17,11 +18,26 @@ import { ThemeMode } from '@/types';
 export const Settings: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const { settings, updateSettings, favouriteQuotes, toggleFavouriteQuote } = useJournalContext();
-  const [userName, setUserName] = useState(settings.userName);
+  const [userName, setUserName] = useState(settings?.userName || '');
+  const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    if (settings?.userName !== undefined) {
+      setUserName(settings.userName);
+    }
+  }, [settings?.userName]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setUserName(val);
+    updateSettings({ userName: val });
+  };
 
   const handleSaveName = (e: React.FormEvent) => {
     e.preventDefault();
     updateSettings({ userName });
+    setIsSaved(true);
+    setTimeout(() => setIsSaved(false), 3000);
   };
 
   const handleClearAllData = () => {
@@ -79,17 +95,25 @@ export const Settings: React.FC = () => {
           <span>User Profile</span>
         </h2>
 
-        <form onSubmit={handleSaveName} className="flex flex-col sm:flex-row items-center gap-4">
-          <input
-            type="text"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            placeholder="Your name or preferred nickname..."
-            className="flex-1 w-full px-4 py-2.5 rounded-2xl bg-[var(--bg-cream)] text-sm font-bold text-[var(--text)] border-2 border-[var(--border)] shadow-[2px_2px_0px_0px_var(--border)] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
-          />
-          <Button variant="primary" size="md" icon={<HiOutlineSave />}>
-            Save Name
-          </Button>
+        <form onSubmit={handleSaveName} className="space-y-3">
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <input
+              type="text"
+              value={userName}
+              onChange={handleInputChange}
+              placeholder="Your name or preferred nickname..."
+              className="flex-1 w-full px-4 py-2.5 rounded-2xl bg-[var(--bg-cream)] text-sm font-bold text-[var(--text)] border-2 border-[var(--border)] shadow-[2px_2px_0px_0px_var(--border)] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+            />
+            <Button variant="primary" size="md" icon={isSaved ? <HiCheck /> : <HiOutlineSave />}>
+              {isSaved ? 'Name Saved!' : 'Save Name'}
+            </Button>
+          </div>
+          {isSaved && (
+            <p className="text-xs font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 animate-pulse">
+              <HiCheck className="text-sm" />
+              <span>Name saved to local storage and updated across dashboard!</span>
+            </p>
+          )}
         </form>
       </div>
 

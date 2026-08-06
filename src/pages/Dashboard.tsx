@@ -9,6 +9,7 @@ import {
 } from 'react-icons/hi';
 import { useJournal } from '@/hooks/useJournal';
 import { useMood } from '@/hooks/useMood';
+import { useJournalContext } from '@/context/JournalContext';
 import { MoodCard } from '@/components/MoodCard/MoodCard';
 import { QuoteCard } from '@/components/QuoteCard/QuoteCard';
 import { JournalCard } from '@/components/JournalCard/JournalCard';
@@ -25,6 +26,7 @@ export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { entries, deleteEntry } = useJournal();
   const { moodLogs, todayMood, logMood } = useMood();
+  const { settings } = useJournalContext();
   const [isMoodModalOpen, setIsMoodModalOpen] = useState(false);
 
   const getGreeting = () => {
@@ -54,7 +56,7 @@ export const Dashboard: React.FC = () => {
             <div className="space-y-4 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--bg-card)] border-2 border-[var(--border)] text-xs font-black text-[var(--text)] shadow-[2px_2px_0px_0px_var(--border)]">
                 <span>{greeting.icon}</span>
-                <span>{greeting.text}, Mindful Soul</span>
+                <span>{greeting.text}, {settings.userName || 'Mindful Soul'}</span>
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-[var(--text)] font-heading leading-tight">

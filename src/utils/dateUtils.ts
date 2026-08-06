@@ -54,42 +54,6 @@ export function getRelativeTimeString(dateStr: string): string {
   return formatDateShort(dateStr);
 }
 
-export function calculateStreak(loggedDates: string[]): number {
-  if (!loggedDates || loggedDates.length === 0) return 0;
-  
-  const sortedDates = Array.from(new Set(loggedDates)).sort().reverse();
-  const todayStr = getTodayDateString();
-  
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayStr = yesterday.toISOString().split('T')[0];
-
-  // Check if active today or yesterday
-  const hasToday = sortedDates.includes(todayStr);
-  const hasYesterday = sortedDates.includes(yesterdayStr);
-
-  if (!hasToday && !hasYesterday) return 0;
-
-  let streak = 0;
-  let checkDate = new Date(hasToday ? todayStr : yesterdayStr);
-
-  while (true) {
-    const year = checkDate.getFullYear();
-    const month = String(checkDate.getMonth() + 1).padStart(2, '0');
-    const day = String(checkDate.getDate()).padStart(2, '0');
-    const dateFormatted = `${year}-${month}-${day}`;
-
-    if (sortedDates.includes(dateFormatted)) {
-      streak++;
-      checkDate.setDate(checkDate.getDate() - 1);
-    } else {
-      break;
-    }
-  }
-
-  return streak;
-}
-
 export function getPastNDaysDates(n: number): string[] {
   const dates: string[] = [];
   for (let i = n - 1; i >= 0; i--) {

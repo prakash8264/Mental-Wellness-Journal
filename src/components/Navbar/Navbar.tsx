@@ -8,11 +8,9 @@ import {
   HiOutlineCog,
   HiOutlineSun, 
   HiOutlineMoon, 
-  HiFire,
   HiPlus
 } from 'react-icons/hi';
 import { useTheme } from '@/hooks/useTheme';
-import { useJournal } from '@/hooks/useJournal';
 import { ROUTES } from '@/constants/routes';
 
 const navLinks = [
@@ -26,7 +24,6 @@ export const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isDark, toggleTheme } = useTheme();
-  const { streakDays } = useJournal();
 
   return (
     <header className="sticky top-4 z-50 w-full px-4 mb-8">
@@ -70,17 +67,6 @@ export const Navbar: React.FC = () => {
 
           {/* Right Actions */}
           <div className="flex items-center gap-3">
-            {/* Streak Badge */}
-            {streakDays > 0 && (
-              <div 
-                className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--accent-mint)] text-[var(--text)] text-xs font-black border-2 border-[var(--border)] shadow-[2px_2px_0px_0px_var(--border)]"
-                title={`${streakDays} Day Streak`}
-              >
-                <HiFire className="text-[var(--cta)] text-sm animate-bounce" />
-                <span>{streakDays}d Streak</span>
-              </div>
-            )}
-
             {/* Dark Mode Switch */}
             <button
               onClick={toggleTheme}

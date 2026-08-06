@@ -12,7 +12,6 @@ import {
 } from 'recharts';
 import {
   HiOutlineChartBar,
-  HiFire,
   HiOutlineBookOpen,
   HiOutlineHeart,
   HiOutlineSparkles,
@@ -32,7 +31,7 @@ import { MoodType } from '@/types';
 import { useTheme } from '@/hooks/useTheme';
 
 export const Analytics: React.FC = () => {
-  const { entries, streakDays } = useJournal();
+  const { entries } = useJournal();
   const { moodLogs, logMood, deleteMoodLog, getMoodsByDate } = useMood();
 
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString());

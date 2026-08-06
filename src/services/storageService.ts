@@ -1,5 +1,4 @@
 import { JournalEntry, MoodLog, AppSettings, ThemeMode, Quote } from '@/types';
-import { FALLBACK_QUOTES } from '@/constants/quotes';
 
 const KEYS = {
   JOURNAL_ENTRIES: 'serene_journal_entries',
@@ -19,119 +18,19 @@ const DEFAULT_SETTINGS: AppSettings = {
   soundEffects: true,
 };
 
-// Seed initial demo data for a rich first-run experience
-const INITIAL_DEMO_ENTRIES: JournalEntry[] = [
-  {
-    id: 'entry-demo-1',
-    title: 'Morning Sun & Quiet Reflections',
-    content: `Woke up early today before the world started rushing. Watched the soft golden sunlight filter through the window with a warm mug of chamomile tea.\n\nTook 10 minutes to just breathe deeply. It felt so good to slow down my racing thoughts and acknowledge everything I am grateful for today. Setting a peaceful tone for the rest of the week!`,
-    date: new Date().toISOString().split('T')[0],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    mood: 'calm',
-    tags: ['Mindfulness', 'Morning Routine', 'Gratitude'],
-    wordCount: 65,
-    characterCount: 395,
-    readingTimeMinutes: 1,
-  },
-  {
-    id: 'entry-demo-2',
-    title: 'Overcoming Midweek Stress',
-    content: `Felt a wave of pressure around midday with deadlines accumulating. Instead of spiraling, I stepped away for a 15-minute mindful walk around the park.\n\nThe fresh air helped clear the cognitive fog. Reminded myself that I can only take things one step at a time.`,
-    date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
-    createdAt: new Date(Date.now() - 86400000).toISOString(),
-    updatedAt: new Date(Date.now() - 86400000).toISOString(),
-    mood: 'stressed',
-    tags: ['Work', 'Self-Care', 'Breathing'],
-    wordCount: 52,
-    characterCount: 310,
-    readingTimeMinutes: 1,
-  },
-  {
-    id: 'entry-demo-3',
-    title: 'Breakthrough & Creative Energy',
-    content: `Had an incredible brainstorming session today! Everything clicked after days of feeling stuck. It feels wonderful when creativity flows naturally without tension.\n\nCelebrated with a evening walk and listened to my favorite ambient playlist. Feeling genuinely excited about upcoming projects!`,
-    date: new Date(Date.now() - 86400000 * 2).toISOString().split('T')[0],
-    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-    updatedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-    mood: 'excited',
-    tags: ['Creativity', 'Joy', 'Growth'],
-    wordCount: 50,
-    characterCount: 305,
-    readingTimeMinutes: 1,
-  },
-];
-
-const INITIAL_DEMO_MOODS: MoodLog[] = [
-  {
-    id: 'mood-demo-1',
-    date: new Date().toISOString().split('T')[0],
-    time: '08:42',
-    mood: 'calm',
-    timestamp: new Date().toISOString(),
-  },
-  {
-    id: 'mood-demo-1b',
-    date: new Date().toISOString().split('T')[0],
-    time: '11:52',
-    mood: 'happy',
-    timestamp: new Date().toISOString(),
-  },
-  {
-    id: 'mood-demo-2',
-    date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
-    time: '10:30',
-    mood: 'stressed',
-    timestamp: new Date(Date.now() - 86400000).toISOString(),
-  },
-  {
-    id: 'mood-demo-3',
-    date: new Date(Date.now() - 86400000 * 2).toISOString().split('T')[0],
-    time: '15:20',
-    mood: 'excited',
-    timestamp: new Date(Date.now() - 86400000 * 2).toISOString(),
-  },
-  {
-    id: 'mood-demo-4',
-    date: new Date(Date.now() - 86400000 * 3).toISOString().split('T')[0],
-    time: '09:15',
-    mood: 'happy',
-    timestamp: new Date(Date.now() - 86400000 * 3).toISOString(),
-  },
-  {
-    id: 'mood-demo-5',
-    date: new Date(Date.now() - 86400000 * 4).toISOString().split('T')[0],
-    time: '20:45',
-    mood: 'calm',
-    timestamp: new Date(Date.now() - 86400000 * 4).toISOString(),
-  },
-  {
-    id: 'mood-demo-6',
-    date: new Date(Date.now() - 86400000 * 5).toISOString().split('T')[0],
-    time: '14:00',
-    mood: 'happy',
-    timestamp: new Date(Date.now() - 86400000 * 5).toISOString(),
-  },
-  {
-    id: 'mood-demo-7',
-    date: new Date(Date.now() - 86400000 * 6).toISOString().split('T')[0],
-    mood: 'neutral',
-    timestamp: new Date(Date.now() - 86400000 * 6).toISOString(),
-  },
-];
-
+// Storage keys and default settings
 export const storageService = {
   // Journal Entries
   getEntries(): JournalEntry[] {
     try {
       const data = localStorage.getItem(KEYS.JOURNAL_ENTRIES);
       if (!data) {
-        this.saveEntries(INITIAL_DEMO_ENTRIES);
-        return INITIAL_DEMO_ENTRIES;
+        return [];
       }
-      return JSON.parse(data);
+      const parsed: JournalEntry[] = JSON.parse(data);
+      return parsed.filter((e) => !e.id.startsWith('entry-demo-'));
     } catch {
-      return INITIAL_DEMO_ENTRIES;
+      return [];
     }
   },
 
@@ -171,12 +70,12 @@ export const storageService = {
     try {
       const data = localStorage.getItem(KEYS.MOOD_LOGS);
       if (!data) {
-        this.saveMoodLogs(INITIAL_DEMO_MOODS);
-        return INITIAL_DEMO_MOODS;
+        return [];
       }
-      return JSON.parse(data);
+      const parsed: MoodLog[] = JSON.parse(data);
+      return parsed.filter((l) => !l.id.startsWith('mood-demo-'));
     } catch {
-      return INITIAL_DEMO_MOODS;
+      return [];
     }
   },
 
@@ -240,9 +139,9 @@ export const storageService = {
   getFavouriteQuotes(): Quote[] {
     try {
       const data = localStorage.getItem(KEYS.FAVOURITE_QUOTES);
-      return data ? JSON.parse(data) : [FALLBACK_QUOTES[0]];
+      return data ? JSON.parse(data) : [];
     } catch {
-      return [FALLBACK_QUOTES[0]];
+      return [];
     }
   },
 
