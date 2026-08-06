@@ -9,7 +9,6 @@ import {
   HiOutlineSearch,
   HiOutlineFilter,
   HiOutlinePencil,
-  HiOutlineClock,
   HiOutlineDocumentText,
   HiOutlineBookOpen,
   HiOutlineArrowLeft
@@ -25,16 +24,9 @@ import { Button } from '@/components/Buttons/Button';
 import { EmptyState } from '@/components/EmptyState/EmptyState';
 import { calculateWordAndCharCount, getMoodOption } from '@/utils/moodUtils';
 import { getTodayDateString, formatDateFull } from '@/utils/dateUtils';
-import { MoodType, JournalEntry } from '@/types';
+import { MoodType } from '@/types';
 import { ROUTES } from '@/constants/routes';
 import { MOOD_LIST } from '@/constants/moods';
-
-// Strip HTML tags to get plain text for word/char counting
-const stripHtml = (html: string): string => {
-  const tmp = document.createElement('div');
-  tmp.innerHTML = html;
-  return tmp.textContent || tmp.innerText || '';
-};
 
 export const Journal: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -119,9 +111,7 @@ export const Journal: React.FC = () => {
       setActiveTab(dateParam ? 'editor' : 'list');
     }
   }, [id, dateParam, searchParams, getEntryById, todayMood]);
-
-  const plainText = stripHtml(content);
-  const { words, chars, readingTime } = calculateWordAndCharCount(plainText);
+  const { words, chars, readingTime } = calculateWordAndCharCount(content);
 
   // Track unsaved changes when any field is modified
   const isFirstRender = useRef(true);
@@ -300,10 +290,6 @@ export const Journal: React.FC = () => {
                         {words} words
                       </span>
                       <span>{chars} characters</span>
-                      <span className="flex items-center gap-1 hidden sm:inline-flex">
-                        <HiOutlineClock className="text-[var(--text)]" />
-                        {readingTime} min read
-                      </span>
                     </div>
 
                     {entryId && (
@@ -440,10 +426,6 @@ export const Journal: React.FC = () => {
                         {words} words
                       </span>
                       <span>{chars} characters</span>
-                      <span className="flex items-center gap-1 hidden sm:inline-flex">
-                        <HiOutlineClock className="text-[var(--text)]" />
-                        {readingTime} min read
-                      </span>
                     </div>
 
                     {entryId && (

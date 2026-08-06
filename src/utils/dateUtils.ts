@@ -33,15 +33,6 @@ export function formatDateShort(dateStr: string): string {
   });
 }
 
-export function formatTime(timeStr: string): string {
-  if (!timeStr) return '';
-  const date = new Date(timeStr);
-  return date.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-}
-
 export function getRelativeTimeString(dateStr: string): string {
   const today = getTodayDateString();
   if (dateStr === today) return 'Today';

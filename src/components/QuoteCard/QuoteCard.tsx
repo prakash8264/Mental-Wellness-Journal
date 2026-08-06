@@ -4,7 +4,7 @@ import { useQuotes } from '@/hooks/useQuotes';
 import { HiRefresh, HiHeart, HiOutlineHeart, HiOutlineSparkles } from 'react-icons/hi';
 
 export const QuoteCard: React.FC = () => {
-  const { quote, loading, error, refreshQuote, toggleFavouriteQuote, isFavourite } = useQuotes();
+  const { quote, loading, refreshQuote, toggleFavouriteQuote, isFavourite } = useQuotes();
 
   return (
     <div className="clay-card p-6 sm:p-8 rounded-3xl relative overflow-hidden bg-[var(--accent-purple)] text-[var(--text)] border-3 border-[var(--border)]">

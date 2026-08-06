@@ -36,27 +36,6 @@ export function calculateAverageMood(logs: MoodLog[]): { score: number; label: s
   };
 }
 
-export function getMostCommonMood(logs: MoodLog[]): MoodOption {
-  if (!logs || logs.length === 0) return MOOD_OPTIONS.calm;
-
-  const counts: Record<string, number> = {};
-  logs.forEach((log) => {
-    counts[log.mood] = (counts[log.mood] || 0) + 1;
-  });
-
-  let maxCount = 0;
-  let topMood: MoodType = 'calm';
-
-  Object.entries(counts).forEach(([mood, count]) => {
-    if (count > maxCount) {
-      maxCount = count;
-      topMood = mood as MoodType;
-    }
-  });
-
-  return getMoodOption(topMood);
-}
-
 export function calculateWordAndCharCount(text: string): { words: number; chars: number; readingTime: number } {
   // Strip HTML tags if content comes from rich text editor
   const stripped = text.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');

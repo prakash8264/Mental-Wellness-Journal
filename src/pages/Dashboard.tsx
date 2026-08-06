@@ -19,13 +19,12 @@ import { WeeklyMoodChart } from '@/components/Charts/WeeklyMoodChart';
 import { MoodLogModal } from '@/components/MoodLogger/MoodLogModal';
 import { calculateAverageMood } from '@/utils/moodUtils';
 import { getTodayDateString } from '@/utils/dateUtils';
-import { MoodType } from '@/types';
 import { ROUTES } from '@/constants/routes';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { entries, deleteEntry } = useJournal();
-  const { moodLogs, todayMood, logMood } = useMood();
+  const { moodLogs, todayMood } = useMood();
   const { settings } = useJournalContext();
   const [isMoodModalOpen, setIsMoodModalOpen] = useState(false);
 
@@ -41,11 +40,6 @@ export const Dashboard: React.FC = () => {
   const todayMoodLogs = moodLogs.filter((m) => m.date === todayStr);
   const todayAvgMood = calculateAverageMood(todayMoodLogs);
   const recentEntries = entries.slice(0, 3);
-
-  const handleSelectMood = (mood: MoodType) => {
-    logMood(mood);
-    setIsMoodModalOpen(false);
-  };
 
   return (
     <div className="space-y-8 pb-16">

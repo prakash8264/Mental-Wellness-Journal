@@ -18,7 +18,7 @@ export const MoodLogModal: React.FC<MoodLogModalProps> = ({
   onClose,
   initialDate,
 }) => {
-  const { moodLogs, logMood, deleteMoodLog, getMoodsByDate } = useMood();
+  const { logMood, deleteMoodLog, getMoodsByDate } = useMood();
   
   const [selectedDate, setSelectedDate] = useState(initialDate || getTodayDateString());
   const [selectedTime, setSelectedTime] = useState(getCurrentTimeString());

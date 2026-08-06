@@ -3,7 +3,6 @@ import {
   HiOutlineCog, 
   HiOutlineSun, 
   HiOutlineMoon, 
-  HiOutlineDesktopComputer,
   HiOutlineHeart,
   HiOutlineTrash,
   HiOutlineSave,

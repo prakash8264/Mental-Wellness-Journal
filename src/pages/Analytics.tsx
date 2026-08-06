@@ -5,33 +5,26 @@ import {
   Area,
   XAxis,
   YAxis,
-  Tooltip,
-  PieChart,
-  Pie,
-  Cell
+  Tooltip
 } from 'recharts';
 import {
   HiOutlineChartBar,
-  HiOutlineBookOpen,
-  HiOutlineHeart,
   HiOutlineSparkles,
   HiOutlineCalendar,
   HiOutlineTrash,
   HiOutlineClock,
   HiOutlinePlus
 } from 'react-icons/hi';
-import { useJournal } from '@/hooks/useJournal';
 import { useMood } from '@/hooks/useMood';
 import { CalendarWidget } from '@/components/CalendarWidget/CalendarWidget';
 import { MoodSelector } from '@/components/MoodSelector/MoodSelector';
-import { calculateAverageMood, getMostCommonMood, getMoodOption } from '@/utils/moodUtils';
+import { calculateAverageMood, getMoodOption } from '@/utils/moodUtils';
 import { getPastNDaysDates, formatDateShort, formatDateFull, getTodayDateString, getCurrentTimeString } from '@/utils/dateUtils';
 import { MOOD_OPTIONS } from '@/constants/moods';
 import { MoodType } from '@/types';
 import { useTheme } from '@/hooks/useTheme';
 
 export const Analytics: React.FC = () => {
-  const { entries } = useJournal();
   const { moodLogs, logMood, deleteMoodLog, getMoodsByDate } = useMood();
 
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString());
@@ -99,30 +92,6 @@ export const Analytics: React.FC = () => {
     });
   }
 
-  // 4. Distribution calculation
-  const moodCounts: Record<string, number> = {};
-  moodLogs.forEach((l) => {
-    moodCounts[l.mood] = (moodCounts[l.mood] || 0) + 1;
-  });
-
-  const pieColors: Record<string, string> = {
-    happy: '#FEF08A',
-    excited: '#F59E0B',
-    calm: '#A7F3D0',
-    neutral: '#94A3B8',
-    sad: '#A5F3FC',
-    depressed: '#818CF8',
-    angry: '#FFB7B2',
-    anxious: '#E9D5FF',
-    stressed: '#FB923C',
-  };
-
-  const distributionData = Object.entries(moodCounts).map(([mood, count]) => ({
-    name: MOOD_OPTIONS[mood as keyof typeof MOOD_OPTIONS]?.label || mood,
-    value: count,
-    emoji: MOOD_OPTIONS[mood as keyof typeof MOOD_OPTIONS]?.emoji || '😐',
-    color: pieColors[mood] || '#FEF08A',
-  }));
 
   const { isDark } = useTheme();
   const axisTickColor = isDark ? '#94A3B8' : '#1E293B';

@@ -4,7 +4,6 @@ import {
   HiOutlineHome, 
   HiOutlineBookOpen, 
   HiOutlineChartBar, 
-  HiOutlineCalendar, 
   HiOutlineCog,
   HiOutlineSun, 
   HiOutlineMoon, 

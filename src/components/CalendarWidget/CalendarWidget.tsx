@@ -3,7 +3,6 @@ import Calendar from 'react-calendar';
 import { useNavigate } from 'react-router-dom';
 import { useJournal } from '@/hooks/useJournal';
 import { useMood } from '@/hooks/useMood';
-import { getMoodOption } from '@/utils/moodUtils';
 import { getTodayDateString } from '@/utils/dateUtils';
 import { ROUTES } from '@/constants/routes';
 

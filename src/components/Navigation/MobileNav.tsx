@@ -4,7 +4,6 @@ import {
   HiOutlineHome, 
   HiOutlineBookOpen, 
   HiOutlineChartBar, 
-  HiOutlineCalendar, 
   HiOutlineCog 
 } from 'react-icons/hi';
 import { ROUTES } from '@/constants/routes';

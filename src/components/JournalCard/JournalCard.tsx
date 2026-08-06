@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { JournalEntry } from '@/types';
 import { getMoodOption } from '@/utils/moodUtils';
 import { formatDateShort, getRelativeTimeString } from '@/utils/dateUtils';
-import { HiOutlineClock, HiOutlineDocumentText, HiOutlineTrash, HiOutlinePencil } from 'react-icons/hi';
+import { HiOutlineDocumentText, HiOutlineTrash, HiOutlinePencil } from 'react-icons/hi';
 
 interface JournalCardProps {
   entry: JournalEntry;
@@ -67,10 +67,6 @@ export const JournalCard: React.FC<JournalCardProps> = ({ entry, onDelete }) => 
           <span className="flex items-center gap-1">
             <HiOutlineDocumentText className="text-[var(--text)]" />
             {entry.wordCount} words
-          </span>
-          <span className="flex items-center gap-1">
-            <HiOutlineClock className="text-[var(--text)]" />
-            {entry.readingTimeMinutes} min
           </span>
         </div>
 
