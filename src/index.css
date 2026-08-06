@@ -252,8 +252,22 @@ h6,
 }
 
 /* ========================================
-   React Quill — Neo-Brutalist Overrides
-   ======================================== */
+/* Read-only view overrides */
+.journal-readonly .ql-toolbar.ql-snow {
+  display: none !important;
+}
+
+.journal-readonly .ql-container.ql-snow {
+  border: none !important;
+  font-family: inherit !important;
+}
+
+.journal-readonly .ql-editor {
+  padding: 0 !important;
+  min-height: 100px !important;
+  font-size: 1rem !important;
+  color: var(--text) !important;
+}
 
 .journal-quill-editor .quill {
   border: none !important;
@@ -274,12 +288,15 @@ h6,
   border: 2px solid var(--border) !important;
   border-radius: 0.65rem !important;
   box-shadow: 1.5px 1.5px 0px 0px var(--border) !important;
-  width: 30px !important;
-  height: 28px !important;
-  padding: 3px !important;
-  margin: 1px 2px !important;
+  width: 34px !important;
+  height: 32px !important;
+  padding: 4px !important;
+  margin: 2px 3px !important;
   transition: all 0.15s ease !important;
   cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .journal-quill-editor .ql-toolbar.ql-snow .ql-formats button:hover {
@@ -299,26 +316,45 @@ h6,
 }
 
 /* Toolbar SVG icons */
-.journal-quill-editor .ql-toolbar.ql-snow .ql-formats button svg .ql-stroke {
+.journal-quill-editor .ql-toolbar.ql-snow .ql-formats button svg,
+.journal-quill-editor .ql-toolbar.ql-snow .ql-picker .ql-picker-label svg {
+  width: 18px !important;
+  height: 18px !important;
+  max-width: 18px !important;
+  max-height: 18px !important;
+  float: none !important;
+}
+
+.journal-quill-editor .ql-toolbar.ql-snow .ql-formats button svg .ql-stroke,
+.journal-quill-editor .ql-toolbar.ql-snow .ql-picker .ql-picker-label svg .ql-stroke {
   stroke: var(--text) !important;
 }
 
-.journal-quill-editor .ql-toolbar.ql-snow .ql-formats button svg .ql-fill {
+.journal-quill-editor .ql-toolbar.ql-snow .ql-formats button svg .ql-fill,
+.journal-quill-editor .ql-toolbar.ql-snow .ql-picker .ql-picker-label svg .ql-fill {
   fill: var(--text) !important;
 }
 
-/* Toolbar dropdowns (Header, Font, Color, etc.) */
+/* Toolbar dropdowns (Header, Font, Color, Align, etc.) */
 .journal-quill-editor .ql-toolbar.ql-snow .ql-formats .ql-picker {
   background: var(--bg-card) !important;
   border: 2px solid var(--border) !important;
   border-radius: 0.65rem !important;
   box-shadow: 1.5px 1.5px 0px 0px var(--border) !important;
-  margin: 1px 2px !important;
+  margin: 2px 3px !important;
   font-weight: 700 !important;
   font-size: 0.75rem !important;
   color: var(--text) !important;
-  height: 28px !important;
+  height: 32px !important;
+  line-height: 26px !important;
   transition: all 0.15s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.journal-quill-editor .ql-toolbar.ql-snow .ql-formats .ql-picker.ql-icon-picker,
+.journal-quill-editor .ql-toolbar.ql-snow .ql-formats .ql-picker.ql-color-picker {
+  width: 34px !important;
 }
 
 .journal-quill-editor .ql-toolbar.ql-snow .ql-formats .ql-picker:hover {
@@ -328,8 +364,13 @@ h6,
 .journal-quill-editor .ql-toolbar.ql-snow .ql-picker .ql-picker-label {
   color: var(--text) !important;
   border: none !important;
-  padding: 2px 8px !important;
+  padding: 2px 6px !important;
   font-weight: 700 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .journal-quill-editor .ql-toolbar.ql-snow .ql-picker .ql-picker-label svg .ql-stroke {

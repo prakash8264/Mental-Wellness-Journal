@@ -16,7 +16,7 @@ export const JournalCard: React.FC<JournalCardProps> = ({ entry, onDelete }) => 
 
   return (
     <div
-      onClick={() => navigate(`/journal/${entry.id}`)}
+      onClick={() => navigate(`/journal/${entry.id}?mode=view`)}
       className="clay-card clay-card-hover p-6 rounded-3xl cursor-pointer flex flex-col justify-between bg-[var(--bg-card)] border-3 border-[var(--border)] group relative"
     >
       <div>
@@ -76,8 +76,8 @@ export const JournalCard: React.FC<JournalCardProps> = ({ entry, onDelete }) => 
 
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
           <button
-            onClick={() => navigate(`/journal/${entry.id}`)}
-            className="p-1.5 rounded-lg bg-[var(--secondary)] border-2 border-[var(--border)] text-[var(--text)] font-bold transition-transform hover:scale-110"
+            onClick={() => navigate(`/journal/${entry.id}?mode=edit`)}
+            className="p-1.5 rounded-lg bg-[var(--secondary)] border-2 border-[var(--border)] text-[var(--text)] font-bold transition-transform hover:scale-110 cursor-pointer"
             title="Edit Entry"
           >
             <HiOutlinePencil className="text-sm" />
@@ -85,7 +85,7 @@ export const JournalCard: React.FC<JournalCardProps> = ({ entry, onDelete }) => 
           {onDelete && (
             <button
               onClick={() => onDelete(entry.id)}
-              className="p-1.5 rounded-lg bg-[var(--cta)] border-2 border-[var(--border)] text-white font-bold transition-transform hover:scale-110"
+              className="p-1.5 rounded-lg bg-[var(--cta)] border-2 border-[var(--border)] text-white font-bold transition-transform hover:scale-110 cursor-pointer"
               title="Delete Entry"
             >
               <HiOutlineTrash className="text-sm" />

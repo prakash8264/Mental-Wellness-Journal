@@ -419,36 +419,6 @@ export const Analytics: React.FC = () => {
 
         </div>
       </div>
-
-      {/* Overall Distribution Breakdown Footer */}
-      <div className="clay-card p-6 sm:p-8 rounded-3xl bg-[var(--bg-card)] border-3 border-[var(--border)] space-y-4">
-        <div>
-          <h3 className="text-lg font-black text-[var(--text)] font-heading">
-            Total Mood Distribution & Breakdown
-          </h3>
-          <p className="text-xs text-[var(--text-muted)] font-bold">
-            All-time emotional summary across your reflections
-          </p>
-        </div>
-
-        {distributionData.length === 0 ? (
-          <div className="py-6 text-center text-xs font-bold text-[var(--text-muted)]">
-            No mood logs recorded yet.
-          </div>
-        ) : (
-          <div className="flex flex-wrap gap-2 pt-2 justify-start">
-            {distributionData.map((item) => (
-              <span
-                key={item.name}
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[var(--bg-cream)] text-xs font-black text-[var(--text)] border-2 border-[var(--border)] shadow-[2px_2px_0px_0px_var(--border)]"
-              >
-                <span className="w-3 h-3 rounded-full border border-[var(--border)]" style={{ backgroundColor: item.color }} />
-                <span>{item.emoji} {item.name}: {item.value} log(s)</span>
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
     </div>
   );
 };

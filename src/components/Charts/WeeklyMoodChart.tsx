@@ -13,6 +13,7 @@ interface WeeklyMoodChartProps {
 export const WeeklyMoodChart: React.FC<WeeklyMoodChartProps> = ({ moodLogs }) => {
   const { isDark } = useTheme();
   const axisTickColor = isDark ? '#F8FAFC' : '#64748B';
+  const chartStrokeColor = isDark ? '#10B981' : '#1E293B';
   const dates = getPastNDaysDates(7);
 
   const data = dates.map((dateStr) => {
@@ -35,7 +36,7 @@ export const WeeklyMoodChart: React.FC<WeeklyMoodChartProps> = ({ moodLogs }) =>
     return {
       date: formatDateShort(dateStr),
       score: avgScore,
-      label: `${option.label} (${dayLogs.length} logs)`,
+      label: `${option.label} (${dayLogs.length} log${dayLogs.length > 1 ? 's' : ''})`,
       emoji: option.emoji,
     };
   });
@@ -45,34 +46,34 @@ export const WeeklyMoodChart: React.FC<WeeklyMoodChartProps> = ({ moodLogs }) =>
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={data} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
           <defs>
-            <linearGradient id="moodGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#9381FF" stopOpacity={0.4} />
-              <stop offset="95%" stopColor="#9381FF" stopOpacity={0.0} />
+            <linearGradient id="weeklyMoodGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#A7F3D0" stopOpacity={0.8} />
+              <stop offset="95%" stopColor="#A7F3D0" stopOpacity={0.0} />
             </linearGradient>
           </defs>
           <XAxis 
             dataKey="date" 
             tickLine={false} 
             axisLine={false} 
-            tick={{ fontSize: 11, fill: axisTickColor }} 
+            tick={{ fontSize: 11, fill: axisTickColor, fontWeight: 'bold' }} 
           />
           <YAxis 
             domain={[1, 10]} 
             tickLine={false} 
             axisLine={false} 
-            tick={{ fontSize: 11, fill: axisTickColor }} 
+            tick={{ fontSize: 11, fill: axisTickColor, fontWeight: 'bold' }} 
           />
           <Tooltip
             content={({ active, payload }) => {
               if (active && payload && payload.length) {
                 const item = payload[0].payload;
                 return (
-                  <div className="glass-card px-3 py-2 rounded-xl text-xs shadow-lg border border-purple-200 dark:border-purple-800">
-                    <p className="font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
-                      <span>{item.emoji}</span>
+                  <div className="clay-card px-3 py-2 rounded-xl text-xs bg-[var(--bg-card)] text-[var(--text)] border-2 border-[var(--border)] shadow-[3px_3px_0px_0px_var(--border)] font-black">
+                    <p className="flex items-center gap-1.5">
+                      <span className="text-base">{item.emoji}</span>
                       <span>{item.label}</span>
                     </p>
-                    <p className="text-[10px] text-slate-400 mt-0.5">Score: {item.score}/10</p>
+                    <p className="text-[10px] text-[var(--text-muted)] mt-0.5">Date: {item.date} | Score: {item.score}/10</p>
                   </div>
                 );
               }
@@ -82,10 +83,10 @@ export const WeeklyMoodChart: React.FC<WeeklyMoodChartProps> = ({ moodLogs }) =>
           <Area
             type="monotone"
             dataKey="score"
-            stroke="#9381FF"
+            stroke={chartStrokeColor}
             strokeWidth={3}
             fillOpacity={1}
-            fill="url(#moodGradient)"
+            fill="url(#weeklyMoodGradient)"
           />
         </AreaChart>
       </ResponsiveContainer>
