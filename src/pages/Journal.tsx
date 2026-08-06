@@ -456,7 +456,7 @@ export const Journal: React.FC = () => {
 
                 <div className="clay-card p-6 rounded-3xl bg-[var(--bg-card)] border-3 border-[var(--border)] space-y-4">
                   <h3 className="text-sm font-black text-[var(--text)] font-heading">
-                    Categorize & Tag
+                    Tags
                   </h3>
                   <TagInput tags={tags} onChangeTags={setTags} />
                 </div>
