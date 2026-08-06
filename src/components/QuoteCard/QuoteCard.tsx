@@ -8,9 +8,6 @@ export const QuoteCard: React.FC = () => {
 
   return (
     <div className="clay-card p-6 sm:p-8 rounded-3xl relative overflow-hidden bg-[var(--accent-purple)] text-[var(--text)] border-3 border-[var(--border)]">
-      <span className="absolute right-4 top-2 text-8xl font-black text-[var(--text)]/10 select-none pointer-events-none">
-        “
-      </span>
 
       <div className="flex items-center justify-between mb-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-card)] border-2 border-[var(--border)] text-xs font-black text-[var(--text)] shadow-[2px_2px_0px_0px_var(--border)]">

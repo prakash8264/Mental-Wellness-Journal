@@ -72,10 +72,16 @@ export const Journal: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<'editor' | 'list'>(id || dateParam ? 'editor' : 'list');
 
+  const todayStr = getTodayDateString();
+  const sanitizeDate = (d?: string | null) => {
+    if (!d) return todayStr;
+    return d > todayStr ? todayStr : d;
+  };
+
   const [entryId, setEntryId] = useState<string | undefined>(id);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [date, setDate] = useState(dateParam || getTodayDateString());
+  const [date, setDate] = useState(sanitizeDate(dateParam));
   const [mood, setMood] = useState<MoodType>(todayMood?.mood || 'calm');
   const [tags, setTags] = useState<string[]>([]);
 
@@ -106,7 +112,7 @@ export const Journal: React.FC = () => {
       setEntryId(undefined);
       setTitle('');
       setContent('');
-      setDate(dateParam || getTodayDateString());
+      setDate(sanitizeDate(dateParam));
       setMood(todayMood?.mood || 'calm');
       setTags([]);
       setIsEditing(true);
@@ -367,8 +373,9 @@ export const Journal: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <input
                         type="date"
+                        max={todayStr}
                         value={date}
-                        onChange={(e) => setDate(e.target.value)}
+                        onChange={(e) => setDate(sanitizeDate(e.target.value))}
                         className="bg-[var(--bg-cream)] text-[var(--text)] px-3 py-1.5 rounded-xl font-bold border-2 border-[var(--border)] shadow-[2px_2px_0px_0px_var(--border)] focus:outline-none cursor-pointer"
                       />
                       <span className="text-[var(--text-muted)] font-bold hidden sm:inline">

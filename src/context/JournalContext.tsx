@@ -88,7 +88,10 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, [favouriteQuotes]);
 
   const saveEntry = (entryData: Partial<JournalEntry> & { title: string; content: string; mood: MoodType }): JournalEntry => {
-    const date = entryData.date || todayStr;
+    let date = entryData.date || todayStr;
+    if (date > todayStr) {
+      date = todayStr;
+    }
     const { words, chars, readingTime } = calculateWordAndCharCount(entryData.content);
 
     const newOrUpdatedEntry: JournalEntry = {
@@ -196,6 +199,7 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         settings,
         favouriteQuotes,
         todayMood,
+        streakDays,
         dailyQuote,
         quoteLoading,
         fetchDailyQuote,

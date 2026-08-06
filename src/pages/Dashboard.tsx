@@ -12,6 +12,7 @@ import { useMood } from '@/hooks/useMood';
 import { MoodCard } from '@/components/MoodCard/MoodCard';
 import { QuoteCard } from '@/components/QuoteCard/QuoteCard';
 import { JournalCard } from '@/components/JournalCard/JournalCard';
+import { EmptyState } from '@/components/EmptyState/EmptyState';
 import { CalendarWidget } from '@/components/CalendarWidget/CalendarWidget';
 import { WeeklyMoodChart } from '@/components/Charts/WeeklyMoodChart';
 import { MoodLogModal } from '@/components/MoodLogger/MoodLogModal';

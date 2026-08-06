@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useJournal } from '@/hooks/useJournal';
 import { useMood } from '@/hooks/useMood';
 import { getMoodOption } from '@/utils/moodUtils';
+import { getTodayDateString } from '@/utils/dateUtils';
 import { ROUTES } from '@/constants/routes';
 
 interface CalendarWidgetProps {
@@ -20,6 +21,7 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({
   const navigate = useNavigate();
   const { entries } = useJournal();
   const { moodLogs } = useMood();
+  const todayStr = getTodayDateString();
 
   const handleDateClick = (value: Date) => {
     if (readOnly) return;
@@ -36,6 +38,10 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({
       if (entry) {
         navigate(`/journal/${entry.id}`);
       } else {
+        if (dateStr > todayStr) {
+          alert('Cannot write journal entries for future dates.');
+          return;
+        }
         navigate(`${ROUTES.JOURNAL}?date=${dateStr}`);
       }
     }
@@ -65,6 +71,7 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({
       <Calendar
         onClickDay={readOnly ? undefined : handleDateClick}
         tileContent={tileContent}
+        maxDate={new Date()}
         prev2Label={null}
         next2Label={null}
       />

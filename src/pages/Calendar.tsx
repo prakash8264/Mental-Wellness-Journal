@@ -27,10 +27,17 @@ export const CalendarPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString());
   const [isMoodModalOpen, setIsMoodModalOpen] = useState(false);
 
+  const todayStr = getTodayDateString();
+  const isFutureDate = selectedDate > todayStr;
+
   const selectedEntry = getEntryByDate(selectedDate);
   const selectedDateMoods = getMoodsByDate(selectedDate);
 
   const handleCreateForDate = () => {
+    if (isFutureDate) {
+      alert('Cannot write reflections for future dates.');
+      return;
+    }
     navigate(`${ROUTES.JOURNAL}?date=${selectedDate}`);
   };
 
@@ -48,10 +55,28 @@ export const CalendarPage: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="secondary" size="md" icon={<HiOutlinePlus />} onClick={() => setIsMoodModalOpen(true)}>
+          <Button
+            variant="secondary"
+            size="md"
+            icon={<HiOutlinePlus />}
+            onClick={() => {
+              if (isFutureDate) {
+                alert('Cannot log mood for future dates.');
+                return;
+              }
+              setIsMoodModalOpen(true);
+            }}
+            disabled={isFutureDate}
+          >
             Log Mood
           </Button>
-          <Button variant="primary" size="md" icon={<HiOutlinePlus />} onClick={handleCreateForDate}>
+          <Button
+            variant="primary"
+            size="md"
+            icon={<HiOutlinePlus />}
+            onClick={handleCreateForDate}
+            disabled={isFutureDate}
+          >
             Write Reflection
           </Button>
         </div>
@@ -159,7 +184,13 @@ export const CalendarPage: React.FC = () => {
                 <p className="text-xs text-[var(--text-muted)] font-bold">
                   No written journal entry for this date yet.
                 </p>
-                <Button variant="secondary" size="sm" icon={<HiOutlinePlus />} onClick={handleCreateForDate}>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  icon={<HiOutlinePlus />}
+                  onClick={handleCreateForDate}
+                  disabled={isFutureDate}
+                >
                   Write Reflection
                 </Button>
               </div>
