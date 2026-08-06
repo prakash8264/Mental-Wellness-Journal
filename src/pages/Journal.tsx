@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -14,6 +14,8 @@ import {
   HiOutlineBookOpen,
   HiOutlineArrowLeft
 } from 'react-icons/hi';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import { useJournal } from '@/hooks/useJournal';
 import { useMood } from '@/hooks/useMood';
 import { JournalCard } from '@/components/JournalCard/JournalCard';
@@ -26,6 +28,13 @@ import { getTodayDateString, formatDateFull } from '@/utils/dateUtils';
 import { MoodType, JournalEntry } from '@/types';
 import { ROUTES } from '@/constants/routes';
 
+// Strip HTML tags to get plain text for word/char counting
+const stripHtml = (html: string): string => {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+};
+
 export const Journal: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
@@ -35,6 +44,31 @@ export const Journal: React.FC = () => {
   const { entries, saveEntry, deleteEntry, getEntryById } = useJournal();
   const { todayMood } = useMood();
 
+  // Quill editor toolbar configuration
+  const quillModules = useMemo(() => ({
+    toolbar: [
+      [{ 'header': [1, 2, 3, false] }],
+      [{ 'font': [] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ 'align': [] }],
+      ['blockquote', 'code-block'],
+      ['link', 'image'],
+      ['clean'],
+    ],
+  }), []);
+
+  const quillFormats = [
+    'header', 'font',
+    'bold', 'italic', 'underline', 'strike',
+    'color', 'background',
+    'list',
+    'align',
+    'blockquote', 'code-block',
+    'link', 'image',
+  ];
+
   const [activeTab, setActiveTab] = useState<'editor' | 'list'>(id ? 'editor' : 'editor');
 
   const [entryId, setEntryId] = useState<string | undefined>(id);
@@ -42,7 +76,7 @@ export const Journal: React.FC = () => {
   const [content, setContent] = useState('');
   const [date, setDate] = useState(dateParam || getTodayDateString());
   const [mood, setMood] = useState<MoodType>(todayMood?.mood || 'calm');
-  const [tags, setTags] = useState<string[]>(['Mindfulness']);
+  const [tags, setTags] = useState<string[]>([]);
 
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved');
   const [lastSavedTime, setLastSavedTime] = useState<string | null>(null);
@@ -50,7 +84,7 @@ export const Journal: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMoodFilter, setSelectedMoodFilter] = useState<string>('all');
 
-  const contentRef = useRef<HTMLTextAreaElement>(null);
+
 
   useEffect(() => {
     if (id) {
@@ -70,54 +104,42 @@ export const Journal: React.FC = () => {
       setContent('');
       setDate(dateParam || getTodayDateString());
       setMood(todayMood?.mood || 'calm');
-      setTags(['Mindfulness']);
+      setTags([]);
     }
   }, [id, dateParam, getEntryById, todayMood]);
 
-  const { words, chars, readingTime } = calculateWordAndCharCount(content);
+  const plainText = stripHtml(content);
+  const { words, chars, readingTime } = calculateWordAndCharCount(plainText);
 
+  // Track unsaved changes when any field is modified
+  const isFirstRender = useRef(true);
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     if (!title.trim() && !content.trim()) return;
-
     setSaveStatus('unsaved');
-    const timer = setTimeout(() => {
-      setSaveStatus('saving');
-      const saved = saveEntry({
-        id: entryId,
-        title: title || 'Untitled Entry',
-        content,
-        date,
-        mood,
-        tags,
-      });
-
-      if (!entryId) {
-        setEntryId(saved.id);
-      }
-      
-      setSaveStatus('saved');
-      setLastSavedTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    }, 1200);
-
-    return () => clearTimeout(timer);
   }, [title, content, date, mood, tags]);
 
-  const insertFormatting = (prefix: string, suffix: string = '') => {
-    const textarea = contentRef.current;
-    if (!textarea) return;
+  const handleSave = () => {
+    if (!title.trim() && !content.trim()) return;
+    setSaveStatus('saving');
+    const saved = saveEntry({
+      id: entryId,
+      title: title || 'Untitled Entry',
+      content,
+      date,
+      mood,
+      tags,
+    });
 
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = content.substring(start, end);
-    const replacement = `${prefix}${selectedText || 'text'}${suffix}`;
+    if (!entryId) {
+      setEntryId(saved.id);
+    }
 
-    const newContent = content.substring(0, start) + replacement + content.substring(end);
-    setContent(newContent);
-
-    setTimeout(() => {
-      textarea.focus();
-      textarea.setSelectionRange(start + prefix.length, start + prefix.length + (selectedText.length || 4));
-    }, 0);
+    setSaveStatus('saved');
+    setLastSavedTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
   };
 
   const handleCreateNew = () => {
@@ -127,7 +149,7 @@ export const Journal: React.FC = () => {
     setContent('');
     setDate(getTodayDateString());
     setMood('calm');
-    setTags(['Mindfulness']);
+    setTags([]);
     setActiveTab('editor');
   };
 
@@ -218,7 +240,7 @@ export const Journal: React.FC = () => {
             {/* Writing Canvas (2 Cols) */}
             <div className="lg:col-span-2 space-y-6">
               <div className="clay-card p-6 sm:p-8 rounded-3xl bg-[var(--bg-card)] border-3 border-[var(--border)] space-y-6 relative">
-                {/* Autosave Status Row */}
+                {/* Save Status Row */}
                 <div className="flex items-center justify-between text-xs border-b-2 border-[var(--border)] pb-4">
                   <div className="flex items-center gap-2">
                     <input
@@ -232,7 +254,7 @@ export const Journal: React.FC = () => {
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     {saveStatus === 'saving' && (
                       <span className="flex items-center gap-1.5 text-[var(--cta)] font-black">
                         <HiOutlineSave className="animate-spin" /> Saving...
@@ -246,51 +268,19 @@ export const Journal: React.FC = () => {
                     {saveStatus === 'unsaved' && (
                       <span className="text-amber-500 font-black">Unsaved changes</span>
                     )}
+                    <button
+                      type="button"
+                      onClick={handleSave}
+                      disabled={saveStatus === 'saved' || saveStatus === 'saving' || (!title.trim() && !content.trim())}
+                      className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black border-2 border-[var(--border)] transition-all cursor-pointer ${
+                        saveStatus === 'unsaved'
+                          ? 'bg-[var(--cta)] text-white shadow-[2px_2px_0px_0px_var(--border)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_var(--border)]'
+                          : 'bg-[var(--bg-cream)] text-[var(--text-muted)] opacity-60 cursor-not-allowed'
+                      }`}
+                    >
+                      <HiOutlineSave /> Save
+                    </button>
                   </div>
-                </div>
-
-                {/* Neo-Brutalist Formatting Toolbar — FIXED LIGHT MODE COLOR */}
-                <div className="flex items-center gap-1.5 bg-[var(--bg-cream)] p-1.5 rounded-2xl border-2 border-[var(--border)] w-fit">
-                  <button
-                    type="button"
-                    onClick={() => insertFormatting('**', '**')}
-                    className="px-3.5 py-1 rounded-xl text-xs font-black bg-[var(--bg-card)] border-2 border-[var(--border)] text-[var(--text)] hover:bg-[var(--primary)] shadow-[1.5px_1.5px_0px_0px_var(--border)] transition-all cursor-pointer"
-                    title="Bold (**text**)"
-                  >
-                    B
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => insertFormatting('*', '*')}
-                    className="px-3.5 py-1 rounded-xl text-xs italic font-black bg-[var(--bg-card)] border-2 border-[var(--border)] text-[var(--text)] hover:bg-[var(--secondary)] shadow-[1.5px_1.5px_0px_0px_var(--border)] transition-all cursor-pointer"
-                    title="Italic (*text*)"
-                  >
-                    I
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => insertFormatting('# ')}
-                    className="px-3.5 py-1 rounded-xl text-xs font-black bg-[var(--bg-card)] border-2 border-[var(--border)] text-[var(--text)] hover:bg-[var(--accent-mint)] shadow-[1.5px_1.5px_0px_0px_var(--border)] transition-all cursor-pointer"
-                    title="Heading 1 (# Heading)"
-                  >
-                    H1
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => insertFormatting('> ')}
-                    className="px-3.5 py-1 rounded-xl text-xs font-black bg-[var(--bg-card)] border-2 border-[var(--border)] text-[var(--text)] hover:bg-[var(--accent-purple)] shadow-[1.5px_1.5px_0px_0px_var(--border)] transition-all cursor-pointer"
-                    title="Quote (> Quote)"
-                  >
-                    ”
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => insertFormatting('- ')}
-                    className="px-3.5 py-1 rounded-xl text-xs font-black bg-[var(--bg-card)] border-2 border-[var(--border)] text-[var(--text)] hover:bg-[var(--primary)] shadow-[1.5px_1.5px_0px_0px_var(--border)] transition-all cursor-pointer"
-                    title="Bullet List (- Item)"
-                  >
-                    • List
-                  </button>
                 </div>
 
                 {/* Title Input */}
@@ -302,14 +292,17 @@ export const Journal: React.FC = () => {
                   className="w-full bg-transparent text-2xl sm:text-3xl font-black font-heading text-[var(--text)] placeholder-slate-400 focus:outline-none border-b-3 border-transparent focus:border-[var(--border)] pb-2 transition-colors"
                 />
 
-                {/* Content Editor Area */}
-                <textarea
-                  ref={contentRef}
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="What is on your mind today? Write freely without judgment..."
-                  className="w-full min-h-[380px] bg-transparent text-base sm:text-lg text-[var(--text)] font-medium placeholder-slate-400 leading-relaxed focus:outline-none resize-y"
-                />
+                {/* Rich Text Editor */}
+                <div className="journal-quill-editor">
+                  <ReactQuill
+                    theme="snow"
+                    value={content}
+                    onChange={setContent}
+                    modules={quillModules}
+                    formats={quillFormats}
+                    placeholder="What is on your mind today? Write freely without judgment..."
+                  />
+                </div>
 
                 {/* Metrics & Delete Row */}
                 <div className="flex items-center justify-between pt-4 border-t-2 border-[var(--border)] text-xs text-[var(--text-muted)] font-black">

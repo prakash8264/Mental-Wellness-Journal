@@ -12,16 +12,27 @@ export const WeeklyMoodChart: React.FC<WeeklyMoodChartProps> = ({ moodLogs }) =>
   const dates = getPastNDaysDates(7);
 
   const data = dates.map((dateStr) => {
-    const log = moodLogs.find((m) => m.date === dateStr);
-    const score = log ? MOOD_OPTIONS[log.mood]?.score || 5 : 5;
-    const label = log ? MOOD_OPTIONS[log.mood]?.label || 'Unlogged' : 'Unlogged';
-    const emoji = log ? MOOD_OPTIONS[log.mood]?.emoji || '😶' : '😶';
+    const dayLogs = moodLogs.filter((m) => m.date === dateStr);
+    
+    if (dayLogs.length === 0) {
+      return {
+        date: formatDateShort(dateStr),
+        score: 5,
+        label: 'Unlogged',
+        emoji: '😶',
+      };
+    }
+
+    const totalScore = dayLogs.reduce((acc, l) => acc + (MOOD_OPTIONS[l.mood]?.score || 5), 0);
+    const avgScore = Math.round((totalScore / dayLogs.length) * 10) / 10;
+    const latestLog = dayLogs[0];
+    const option = MOOD_OPTIONS[latestLog.mood] || MOOD_OPTIONS.calm;
 
     return {
       date: formatDateShort(dateStr),
-      score,
-      label,
-      emoji,
+      score: avgScore,
+      label: `${option.label} (${dayLogs.length} logs)`,
+      emoji: option.emoji,
     };
   });
 

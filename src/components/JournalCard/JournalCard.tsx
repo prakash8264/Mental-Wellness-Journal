@@ -45,7 +45,7 @@ export const JournalCard: React.FC<JournalCardProps> = ({ entry, onDelete }) => 
         </h3>
 
         <p className="text-sm text-[var(--text-muted)] font-medium mt-2 line-clamp-2 leading-relaxed">
-          {entry.content}
+          {entry.content.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim()}
         </p>
 
         {entry.tags && entry.tags.length > 0 && (

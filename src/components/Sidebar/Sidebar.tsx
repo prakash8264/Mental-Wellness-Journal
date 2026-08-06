@@ -25,7 +25,6 @@ const navItems: NavItem[] = [
   { name: 'Dashboard', path: ROUTES.DASHBOARD, icon: <HiOutlineHome /> },
   { name: 'Journal', path: ROUTES.JOURNAL, icon: <HiOutlineBookOpen /> },
   { name: 'Analytics', path: ROUTES.ANALYTICS, icon: <HiOutlineChartBar /> },
-  { name: 'Calendar', path: ROUTES.CALENDAR, icon: <HiOutlineCalendar /> },
   { name: 'Settings', path: ROUTES.SETTINGS, icon: <HiOutlineCog /> },
 ];
 

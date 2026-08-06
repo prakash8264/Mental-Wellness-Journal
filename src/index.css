@@ -6,21 +6,33 @@
     --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
     /* Theme Tokens — Exact Match from uupm.cc Educational Platform Image */
-    --bg-cream: #F9F3EA;      /* Exact Warm Paper Off-White Background */
-    --bg-card: #FFFFFF;       /* Solid White Floating Cards */
-    --text: #1E293B;          /* Crisp Charcoal Dark Text */
-    --text-muted: #64748B;    /* Muted Slate Text */
-    --border: #1E293B;        /* Thick Dark Outline Stroke */
+    --bg-cream: #F9F3EA;
+    /* Exact Warm Paper Off-White Background */
+    --bg-card: #FFFFFF;
+    /* Solid White Floating Cards */
+    --text: #1E293B;
+    /* Crisp Charcoal Dark Text */
+    --text-muted: #64748B;
+    /* Muted Slate Text */
+    --border: #1E293B;
+    /* Thick Dark Outline Stroke */
 
     /* Colors from Screenshot */
-    --cta: #22C55E;           /* Vibrant Emerald Green ("Start Free", "Continue Learning") */
+    --cta: #22C55E;
+    /* Vibrant Emerald Green ("Start Free", "Continue Learning") */
     --cta-hover: #16A34A;
-    --secondary: #A5F3FC;     /* Soft Sky Blue ("Browse Courses") */
-    --accent-mint: #A7F3D0;   /* Mint Green Eyebrow Pill ("• New: AI-Powered Learning") */
-    --accent-pink: #FFB7B2;   /* Soft Pink/Peach Badge (Target icon badge) */
-    --accent-yellow: #FEF08A; /* Soft Yellow Star Badge */
-    --accent-purple: #E9D5FF; /* Soft Lavender Books Badge */
-    --primary: #FEF08A;       /* Warm Yellow Highlight */
+    --secondary: #A5F3FC;
+    /* Soft Sky Blue ("Browse Courses") */
+    --accent-mint: #A7F3D0;
+    /* Mint Green Eyebrow Pill ("• New: AI-Powered Learning") */
+    --accent-pink: #FFB7B2;
+    /* Soft Pink/Peach Badge (Target icon badge) */
+    --accent-yellow: #FEF08A;
+    /* Soft Yellow Star Badge */
+    --accent-purple: #E9D5FF;
+    /* Soft Lavender Books Badge */
+    --primary: #FEF08A;
+    /* Warm Yellow Highlight */
   }
 
   .dark {
@@ -49,7 +61,13 @@ body {
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6, .font-heading {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-heading {
   font-family: var(--font-heading);
   letter-spacing: -0.02em;
 }
@@ -231,4 +249,213 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   color: #FFFFFF !important;
   border-color: var(--border) !important;
   box-shadow: 3px 3px 0px 0px var(--border) !important;
+}
+
+/* ========================================
+   React Quill — Neo-Brutalist Overrides
+   ======================================== */
+
+.journal-quill-editor .quill {
+  border: none !important;
+}
+
+/* Toolbar container */
+.journal-quill-editor .ql-toolbar.ql-snow {
+  background-color: var(--bg-cream) !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 1.15rem 1.15rem 0 0 !important;
+  padding: 6px 10px !important;
+  font-family: var(--font-body) !important;
+}
+
+/* Toolbar buttons */
+.journal-quill-editor .ql-toolbar.ql-snow .ql-formats button {
+  background: var(--bg-card) !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0.65rem !important;
+  box-shadow: 1.5px 1.5px 0px 0px var(--border) !important;
+  width: 30px !important;
+  height: 28px !important;
+  padding: 3px !important;
+  margin: 1px 2px !important;
+  transition: all 0.15s ease !important;
+  cursor: pointer !important;
+}
+
+.journal-quill-editor .ql-toolbar.ql-snow .ql-formats button:hover {
+  background: var(--primary) !important;
+  transform: translate(-1px, -1px) !important;
+  box-shadow: 2.5px 2.5px 0px 0px var(--border) !important;
+}
+
+.journal-quill-editor .ql-toolbar.ql-snow .ql-formats button:active {
+  transform: translate(1px, 1px) !important;
+  box-shadow: 0.5px 0.5px 0px 0px var(--border) !important;
+}
+
+.journal-quill-editor .ql-toolbar.ql-snow .ql-formats button.ql-active {
+  background: var(--secondary) !important;
+  box-shadow: 1px 1px 0px 0px var(--border) !important;
+}
+
+/* Toolbar SVG icons */
+.journal-quill-editor .ql-toolbar.ql-snow .ql-formats button svg .ql-stroke {
+  stroke: var(--text) !important;
+}
+
+.journal-quill-editor .ql-toolbar.ql-snow .ql-formats button svg .ql-fill {
+  fill: var(--text) !important;
+}
+
+/* Toolbar dropdowns (Header, Font, Color, etc.) */
+.journal-quill-editor .ql-toolbar.ql-snow .ql-formats .ql-picker {
+  background: var(--bg-card) !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0.65rem !important;
+  box-shadow: 1.5px 1.5px 0px 0px var(--border) !important;
+  margin: 1px 2px !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  color: var(--text) !important;
+  height: 28px !important;
+  transition: all 0.15s ease !important;
+}
+
+.journal-quill-editor .ql-toolbar.ql-snow .ql-formats .ql-picker:hover {
+  background: var(--primary) !important;
+}
+
+.journal-quill-editor .ql-toolbar.ql-snow .ql-picker .ql-picker-label {
+  color: var(--text) !important;
+  border: none !important;
+  padding: 2px 8px !important;
+  font-weight: 700 !important;
+}
+
+.journal-quill-editor .ql-toolbar.ql-snow .ql-picker .ql-picker-label svg .ql-stroke {
+  stroke: var(--text) !important;
+}
+
+/* Dropdown menus */
+.journal-quill-editor .ql-toolbar.ql-snow .ql-picker .ql-picker-options {
+  background: var(--bg-card) !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 3px 3px 0px 0px var(--border) !important;
+  padding: 4px !important;
+  z-index: 100 !important;
+}
+
+.journal-quill-editor .ql-toolbar.ql-snow .ql-picker .ql-picker-options .ql-picker-item {
+  color: var(--text) !important;
+  padding: 4px 8px !important;
+  border-radius: 0.5rem !important;
+  font-weight: 600 !important;
+}
+
+.journal-quill-editor .ql-toolbar.ql-snow .ql-picker .ql-picker-options .ql-picker-item:hover {
+  background: var(--primary) !important;
+}
+
+/* Editor container */
+.journal-quill-editor .ql-container.ql-snow {
+  border: 2px solid var(--border) !important;
+  border-top: none !important;
+  border-radius: 0 0 1.15rem 1.15rem !important;
+  background-color: var(--bg-card) !important;
+  font-family: var(--font-body) !important;
+  font-size: 1rem !important;
+  color: var(--text) !important;
+}
+
+/* Editor writing area */
+.journal-quill-editor .ql-editor {
+  min-height: 350px !important;
+  padding: 1.25rem !important;
+  line-height: 1.75 !important;
+  color: var(--text) !important;
+  font-family: var(--font-body) !important;
+  font-size: 1rem !important;
+}
+
+.journal-quill-editor .ql-editor.ql-blank::before {
+  color: #94a3b8 !important;
+  font-style: italic !important;
+  font-family: var(--font-body) !important;
+}
+
+/* Headings inside editor */
+.journal-quill-editor .ql-editor h1,
+.journal-quill-editor .ql-editor h2,
+.journal-quill-editor .ql-editor h3 {
+  font-family: var(--font-heading) !important;
+  color: var(--text) !important;
+  font-weight: 800 !important;
+}
+
+/* Blockquote inside editor */
+.journal-quill-editor .ql-editor blockquote {
+  border-left: 4px solid var(--cta) !important;
+  color: var(--text-muted) !important;
+  background: var(--bg-cream) !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 0 0.75rem 0.75rem 0 !important;
+  margin: 0.5rem 0 !important;
+}
+
+/* Code block inside editor */
+.journal-quill-editor .ql-editor pre.ql-syntax {
+  background: var(--bg-cream) !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 2px 2px 0px 0px var(--border) !important;
+  color: var(--text) !important;
+  padding: 1rem !important;
+  font-size: 0.875rem !important;
+}
+
+/* Links inside editor */
+.journal-quill-editor .ql-editor a {
+  color: var(--cta) !important;
+  text-decoration: underline !important;
+}
+
+/* Lists inside editor */
+.journal-quill-editor .ql-editor ol,
+.journal-quill-editor .ql-editor ul {
+  padding-left: 1.5rem !important;
+  color: var(--text) !important;
+}
+
+/* Quill tooltip (link editor popup) */
+.journal-quill-editor .ql-tooltip {
+  background: var(--bg-card) !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 3px 3px 0px 0px var(--border) !important;
+  color: var(--text) !important;
+  padding: 8px 12px !important;
+  z-index: 100 !important;
+}
+
+.journal-quill-editor .ql-tooltip input[type='text'] {
+  background: var(--bg-cream) !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 0.5rem !important;
+  color: var(--text) !important;
+  padding: 4px 8px !important;
+  font-family: var(--font-body) !important;
+}
+
+.journal-quill-editor .ql-tooltip a.ql-action,
+.journal-quill-editor .ql-tooltip a.ql-remove {
+  color: var(--cta) !important;
+  font-weight: 700 !important;
+}
+
+/* Outer wrapper shadow */
+.journal-quill-editor {
+  border-radius: 1.25rem;
+  box-shadow: 3px 3px 0px 0px var(--border);
+  overflow: hidden;
 }

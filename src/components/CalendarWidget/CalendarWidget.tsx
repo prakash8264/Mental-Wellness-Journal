@@ -42,19 +42,18 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({ onSelectDate, co
     const day = String(date.getDate()).padStart(2, '0');
     const dateStr = `${year}-${month}-${day}`;
 
-    const moodLog = moodLogs.find((m) => m.date === dateStr);
+    const hasMoods = moodLogs.some((m) => m.date === dateStr);
     const hasJournal = entries.some((e) => e.date === dateStr);
-    const moodOption = moodLog ? getMoodOption(moodLog.mood) : null;
+
+    if (!hasMoods && !hasJournal) return null;
 
     return (
-      <div className="flex flex-col items-center justify-center mt-1 space-y-0.5">
-        {moodOption && (
-          <span className="text-xs leading-none transition-transform hover:scale-125 inline-block">
-            {moodOption.emoji}
-          </span>
+      <div className="flex items-center justify-center gap-1 mt-1">
+        {hasMoods && (
+          <span className="w-2 h-2 rounded-full bg-[var(--primary)] border border-[var(--border)]" title="Mood logged" />
         )}
         {hasJournal && (
-          <span className="w-2 h-2 rounded-full bg-[var(--cta)] border border-[var(--border)] shadow-[1px_1px_0px_0px_var(--border)]" title="Journal entry logged" />
+          <span className="w-2 h-2 rounded-full bg-[var(--cta)] border border-[var(--border)]" title="Journal entry logged" />
         )}
       </div>
     );

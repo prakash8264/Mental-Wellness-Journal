@@ -66,36 +66,49 @@ const INITIAL_DEMO_MOODS: MoodLog[] = [
   {
     id: 'mood-demo-1',
     date: new Date().toISOString().split('T')[0],
+    time: '08:42',
     mood: 'calm',
+    timestamp: new Date().toISOString(),
+  },
+  {
+    id: 'mood-demo-1b',
+    date: new Date().toISOString().split('T')[0],
+    time: '11:52',
+    mood: 'happy',
     timestamp: new Date().toISOString(),
   },
   {
     id: 'mood-demo-2',
     date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
+    time: '10:30',
     mood: 'stressed',
     timestamp: new Date(Date.now() - 86400000).toISOString(),
   },
   {
     id: 'mood-demo-3',
     date: new Date(Date.now() - 86400000 * 2).toISOString().split('T')[0],
+    time: '15:20',
     mood: 'excited',
     timestamp: new Date(Date.now() - 86400000 * 2).toISOString(),
   },
   {
     id: 'mood-demo-4',
     date: new Date(Date.now() - 86400000 * 3).toISOString().split('T')[0],
+    time: '09:15',
     mood: 'happy',
     timestamp: new Date(Date.now() - 86400000 * 3).toISOString(),
   },
   {
     id: 'mood-demo-5',
     date: new Date(Date.now() - 86400000 * 4).toISOString().split('T')[0],
+    time: '20:45',
     mood: 'calm',
     timestamp: new Date(Date.now() - 86400000 * 4).toISOString(),
   },
   {
     id: 'mood-demo-6',
     date: new Date(Date.now() - 86400000 * 5).toISOString().split('T')[0],
+    time: '14:00',
     mood: 'happy',
     timestamp: new Date(Date.now() - 86400000 * 5).toISOString(),
   },
@@ -177,16 +190,14 @@ export const storageService = {
 
   logMood(moodLog: MoodLog): MoodLog[] {
     const logs = this.getMoodLogs();
-    const existingIndex = logs.findIndex((l) => l.date === moodLog.date);
-    let updated: MoodLog[];
+    const updated = [moodLog, ...logs];
+    this.saveMoodLogs(updated);
+    return updated;
+  },
 
-    if (existingIndex >= 0) {
-      updated = [...logs];
-      updated[existingIndex] = moodLog;
-    } else {
-      updated = [moodLog, ...logs];
-    }
-
+  deleteMoodLog(id: string): MoodLog[] {
+    const logs = this.getMoodLogs();
+    const updated = logs.filter((l) => l.id !== id);
     this.saveMoodLogs(updated);
     return updated;
   },

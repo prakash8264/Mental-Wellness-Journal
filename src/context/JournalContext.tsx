@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { JournalEntry, MoodLog, MoodType, AppSettings, Quote } from '@/types';
 import { storageService } from '@/services/storageService';
-import { getTodayDateString, calculateStreak } from '@/utils/dateUtils';
+import { getTodayDateString, getCurrentTimeString, calculateStreak } from '@/utils/dateUtils';
 import { calculateWordAndCharCount } from '@/utils/moodUtils';
 
 interface JournalContextType {
@@ -18,8 +18,10 @@ interface JournalContextType {
   getEntryById: (id: string) => JournalEntry | undefined;
   getEntryByDate: (dateStr: string) => JournalEntry | undefined;
   
-  logMood: (mood: MoodType, note?: string) => void;
+  logMood: (mood: MoodType, note?: string, targetDate?: string, targetTime?: string) => MoodLog;
+  deleteMoodLog: (id: string) => void;
   getMoodByDate: (dateStr: string) => MoodLog | undefined;
+  getMoodsByDate: (dateStr: string) => MoodLog[];
   
   updateSettings: (newSettings: Partial<AppSettings>) => void;
   toggleFavouriteQuote: (quote: Quote) => void;
@@ -35,7 +37,8 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [favouriteQuotes, setFavouriteQuotes] = useState<Quote[]>(() => storageService.getFavouriteQuotes());
 
   const todayStr = getTodayDateString();
-  const todayMood = moodLogs.find((m) => m.date === todayStr);
+  const todayMoods = moodLogs.filter((m) => m.date === todayStr);
+  const todayMood = todayMoods.length > 0 ? todayMoods[0] : undefined;
 
   const allActivityDates = Array.from(
     new Set([
@@ -83,8 +86,8 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const updatedEntries = storageService.saveEntry(newOrUpdatedEntry);
     setEntries(updatedEntries);
 
-    // Also automatically update mood log for that date if not set or update it
-    logMood(entryData.mood, entryData.title);
+    // Also automatically log mood for that date if not already logged
+    logMood(entryData.mood, entryData.title, date);
 
     return newOrUpdatedEntry;
   };
@@ -102,10 +105,14 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return entries.find((e) => e.date === dateStr);
   };
 
-  const logMood = (mood: MoodType, note?: string) => {
+  const logMood = (mood: MoodType, note?: string, targetDate?: string, targetTime?: string): MoodLog => {
+    const dateStr = targetDate || todayStr;
+    const timeStr = targetTime || getCurrentTimeString();
+    
     const newLog: MoodLog = {
-      id: `mood-${Date.now()}`,
-      date: todayStr,
+      id: `mood-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+      date: dateStr,
+      time: timeStr,
       mood: mood,
       note: note,
       timestamp: new Date().toISOString(),
@@ -113,10 +120,20 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     const updated = storageService.logMood(newLog);
     setMoodLogs(updated);
+    return newLog;
+  };
+
+  const deleteMoodLog = (id: string) => {
+    const updated = storageService.deleteMoodLog(id);
+    setMoodLogs(updated);
   };
 
   const getMoodByDate = (dateStr: string) => {
     return moodLogs.find((m) => m.date === dateStr);
+  };
+
+  const getMoodsByDate = (dateStr: string): MoodLog[] => {
+    return moodLogs.filter((m) => m.date === dateStr);
   };
 
   const updateSettings = (newSettings: Partial<AppSettings>) => {
@@ -153,7 +170,9 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         getEntryById,
         getEntryByDate,
         logMood,
+        deleteMoodLog,
         getMoodByDate,
+        getMoodsByDate,
         updateSettings,
         toggleFavouriteQuote,
         isQuoteFavourite,

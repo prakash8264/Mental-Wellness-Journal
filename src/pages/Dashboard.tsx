@@ -16,8 +16,7 @@ import { QuoteCard } from '@/components/QuoteCard/QuoteCard';
 import { JournalCard } from '@/components/JournalCard/JournalCard';
 import { CalendarWidget } from '@/components/CalendarWidget/CalendarWidget';
 import { WeeklyMoodChart } from '@/components/Charts/WeeklyMoodChart';
-import { MoodSelector } from '@/components/MoodSelector/MoodSelector';
-import { Modal } from '@/components/Modal/Modal';
+import { MoodLogModal } from '@/components/MoodLogger/MoodLogModal';
 import { Button } from '@/components/Buttons/Button';
 import { EmptyState } from '@/components/EmptyState/EmptyState';
 import { calculateAverageMood } from '@/utils/moodUtils';
@@ -78,10 +77,10 @@ export const Dashboard: React.FC = () => {
                   <HiOutlineArrowRight className="text-lg" />
                 </button>
                 <button
-                  onClick={() => navigate(ROUTES.CALENDAR)}
+                  onClick={() => navigate(ROUTES.ANALYTICS)}
                   className="btn-secondary text-base py-3.5 px-6"
                 >
-                  Explore Calendar
+                  Explore Mood Analytics
                 </button>
               </div>
 
@@ -259,21 +258,10 @@ export const Dashboard: React.FC = () => {
         )}
       </div>
 
-      <Modal
+      <MoodLogModal
         isOpen={isMoodModalOpen}
         onClose={() => setIsMoodModalOpen(false)}
-        title="Daily Mood Check-in"
-        subtitle="Select how you are feeling right now in this moment"
-        maxWidth="xl"
-      >
-        <div className="py-4">
-          <MoodSelector
-            selectedMood={todayMood?.mood}
-            onSelectMood={handleSelectMood}
-            showLabels={false}
-          />
-        </div>
-      </Modal>
+      />
     </div>
   );
 };

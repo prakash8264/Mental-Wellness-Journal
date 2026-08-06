@@ -38,6 +38,7 @@ export interface JournalEntry {
 export interface MoodLog {
   id: string;
   date: string; // YYYY-MM-DD
+  time?: string; // HH:mm format e.g. "08:42" or "11:52"
   mood: MoodType;
   note?: string;
   timestamp: string;

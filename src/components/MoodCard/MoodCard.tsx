@@ -56,7 +56,7 @@ export const MoodCard: React.FC<MoodCardProps> = ({ moodLog, onOpenSelector }) =
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-black uppercase tracking-wider text-[var(--text-muted)]">
-                {getRelativeTimeString(moodLog.date)}'s Mood
+                {getRelativeTimeString(moodLog.date)}'s Mood {moodLog.time ? `(${moodLog.time})` : ''}
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--text-muted)]" />
               <span className="text-xs font-bold text-[var(--text-muted)]">
@@ -78,7 +78,7 @@ export const MoodCard: React.FC<MoodCardProps> = ({ moodLog, onOpenSelector }) =
             onClick={onOpenSelector}
             className="text-xs font-extrabold text-[var(--cta)] hover:underline underline-offset-4 cursor-pointer"
           >
-            Change
+            + Log Mood
           </button>
         )}
       </div>
