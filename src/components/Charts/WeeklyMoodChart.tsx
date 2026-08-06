@@ -4,11 +4,15 @@ import { MoodLog } from '@/types';
 import { getPastNDaysDates, formatDateShort } from '@/utils/dateUtils';
 import { MOOD_OPTIONS } from '@/constants/moods';
 
+import { useTheme } from '@/hooks/useTheme';
+
 interface WeeklyMoodChartProps {
   moodLogs: MoodLog[];
 }
 
 export const WeeklyMoodChart: React.FC<WeeklyMoodChartProps> = ({ moodLogs }) => {
+  const { isDark } = useTheme();
+  const axisTickColor = isDark ? '#F8FAFC' : '#64748B';
   const dates = getPastNDaysDates(7);
 
   const data = dates.map((dateStr) => {
@@ -50,13 +54,13 @@ export const WeeklyMoodChart: React.FC<WeeklyMoodChartProps> = ({ moodLogs }) =>
             dataKey="date" 
             tickLine={false} 
             axisLine={false} 
-            tick={{ fontSize: 11, fill: '#94A3B8' }} 
+            tick={{ fontSize: 11, fill: axisTickColor }} 
           />
           <YAxis 
             domain={[1, 10]} 
             tickLine={false} 
             axisLine={false} 
-            tick={{ fontSize: 11, fill: '#94A3B8' }} 
+            tick={{ fontSize: 11, fill: axisTickColor }} 
           />
           <Tooltip
             content={({ active, payload }) => {

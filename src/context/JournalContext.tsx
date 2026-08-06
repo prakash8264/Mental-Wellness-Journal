@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { JournalEntry, MoodLog, MoodType, AppSettings, Quote } from '@/types';
 import { storageService } from '@/services/storageService';
+import { quoteService } from '@/services/quoteService';
 import { getTodayDateString, getCurrentTimeString, calculateStreak } from '@/utils/dateUtils';
 import { calculateWordAndCharCount } from '@/utils/moodUtils';
 
@@ -11,6 +12,8 @@ interface JournalContextType {
   favouriteQuotes: Quote[];
   todayMood: MoodLog | undefined;
   streakDays: number;
+  dailyQuote: Quote | null;
+  quoteLoading: boolean;
   
   // Actions
   saveEntry: (entryData: Partial<JournalEntry> & { title: string; content: string; mood: MoodType }) => JournalEntry;
@@ -26,6 +29,7 @@ interface JournalContextType {
   updateSettings: (newSettings: Partial<AppSettings>) => void;
   toggleFavouriteQuote: (quote: Quote) => void;
   isQuoteFavourite: (quoteId: string) => boolean;
+  fetchDailyQuote: (forceRefresh?: boolean) => Promise<void>;
 }
 
 const JournalContext = createContext<JournalContextType | undefined>(undefined);
@@ -35,6 +39,24 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [moodLogs, setMoodLogs] = useState<MoodLog[]>(() => storageService.getMoodLogs());
   const [settings, setSettings] = useState<AppSettings>(() => storageService.getSettings());
   const [favouriteQuotes, setFavouriteQuotes] = useState<Quote[]>(() => storageService.getFavouriteQuotes());
+  const [dailyQuote, setDailyQuote] = useState<Quote | null>(null);
+  const [quoteLoading, setQuoteLoading] = useState<boolean>(false);
+
+  const fetchDailyQuote = async (forceRefresh = false) => {
+    setQuoteLoading(true);
+    try {
+      const data = await quoteService.getRandomQuote();
+      setDailyQuote(data);
+    } catch {
+      setDailyQuote(quoteService.getRandomFallbackQuote());
+    } finally {
+      setQuoteLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDailyQuote(false);
+  }, []);
 
   const todayStr = getTodayDateString();
   const todayMoods = moodLogs.filter((m) => m.date === todayStr);
@@ -106,9 +128,19 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const logMood = (mood: MoodType, note?: string, targetDate?: string, targetTime?: string): MoodLog => {
-    const dateStr = targetDate || todayStr;
-    const timeStr = targetTime || getCurrentTimeString();
+    const today = getTodayDateString();
+    const nowTime = getCurrentTimeString();
     
+    let dateStr = targetDate || today;
+    let timeStr = targetTime || nowTime;
+
+    if (dateStr > today) {
+      dateStr = today;
+    }
+    if (dateStr === today && timeStr > nowTime) {
+      timeStr = nowTime;
+    }
+
     const newLog: MoodLog = {
       id: `mood-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
       date: dateStr,
@@ -164,7 +196,9 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({ child
         settings,
         favouriteQuotes,
         todayMood,
-        streakDays,
+        dailyQuote,
+        quoteLoading,
+        fetchDailyQuote,
         saveEntry,
         deleteEntry,
         getEntryById,

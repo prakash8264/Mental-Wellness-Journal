@@ -13,7 +13,7 @@ export const QuoteCard: React.FC = () => {
       </span>
 
       <div className="flex items-center justify-between mb-4">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border-2 border-[var(--text)] text-xs font-black text-[var(--text)] shadow-[2px_2px_0px_0px_var(--text)]">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-card)] border-2 border-[var(--border)] text-xs font-black text-[var(--text)] shadow-[2px_2px_0px_0px_var(--border)]">
           <HiOutlineSparkles className="text-base text-[var(--cta)]" />
           <span>Daily Mindfulness Quote</span>
         </div>
@@ -22,7 +22,7 @@ export const QuoteCard: React.FC = () => {
           {quote && (
             <button
               onClick={() => toggleFavouriteQuote(quote)}
-              className="w-9 h-9 rounded-xl bg-white border-2 border-[var(--text)] flex items-center justify-center text-[var(--cta)] shadow-[2px_2px_0px_0px_var(--text)] hover:bg-rose-50 cursor-pointer"
+              className="w-9 h-9 rounded-xl bg-[var(--bg-card)] border-2 border-[var(--border)] flex items-center justify-center text-[var(--cta)] shadow-[2px_2px_0px_0px_var(--border)] hover:bg-[var(--bg-cream)] cursor-pointer transition-all"
               title={isFavourite ? 'Remove from favourites' : 'Save to favourites'}
             >
               {isFavourite ? <HiHeart className="text-lg text-[var(--cta)]" /> : <HiOutlineHeart className="text-lg text-[var(--cta)]" />}
@@ -32,7 +32,7 @@ export const QuoteCard: React.FC = () => {
           <button
             onClick={refreshQuote}
             disabled={loading}
-            className="w-9 h-9 rounded-xl bg-white border-2 border-[var(--text)] flex items-center justify-center text-[var(--text)] shadow-[2px_2px_0px_0px_var(--text)] hover:bg-[var(--primary)] cursor-pointer"
+            className="w-9 h-9 rounded-xl bg-[var(--bg-card)] border-2 border-[var(--border)] flex items-center justify-center text-[var(--text)] shadow-[2px_2px_0px_0px_var(--border)] hover:bg-[var(--bg-cream)] cursor-pointer transition-all"
             title="Fetch new inspirational quote"
           >
             <HiRefresh className={`text-lg ${loading ? 'animate-spin' : ''}`} />

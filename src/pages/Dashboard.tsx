@@ -217,7 +217,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         <div>
-          <CalendarWidget compact />
+          <CalendarWidget compact readOnly />
         </div>
       </div>
 

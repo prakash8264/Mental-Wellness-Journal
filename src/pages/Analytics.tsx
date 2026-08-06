@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import { 
-  ResponsiveContainer, 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  Tooltip, 
-  PieChart, 
-  Pie, 
-  Cell 
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
-import { 
-  HiOutlineChartBar, 
-  HiFire, 
-  HiOutlineBookOpen, 
-  HiOutlineHeart, 
+import {
+  HiOutlineChartBar,
+  HiFire,
+  HiOutlineBookOpen,
+  HiOutlineHeart,
   HiOutlineSparkles,
   HiOutlineCalendar,
   HiOutlineTrash,
@@ -29,11 +29,12 @@ import { calculateAverageMood, getMostCommonMood, getMoodOption } from '@/utils/
 import { getPastNDaysDates, formatDateShort, formatDateFull, getTodayDateString, getCurrentTimeString } from '@/utils/dateUtils';
 import { MOOD_OPTIONS } from '@/constants/moods';
 import { MoodType } from '@/types';
+import { useTheme } from '@/hooks/useTheme';
 
 export const Analytics: React.FC = () => {
   const { entries, streakDays } = useJournal();
   const { moodLogs, logMood, deleteMoodLog, getMoodsByDate } = useMood();
-  
+
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString());
   const [selectedTime, setSelectedTime] = useState<string>(getCurrentTimeString());
   const [selectedMood, setSelectedMood] = useState<MoodType>('calm');
@@ -124,11 +125,30 @@ export const Analytics: React.FC = () => {
     color: pieColors[mood] || '#FEF08A',
   }));
 
+  const { isDark } = useTheme();
+  const axisTickColor = isDark ? '#94A3B8' : '#1E293B';
+  const chartStrokeColor = isDark ? '#10B981' : '#1E293B';
+
   const handleLogMoodFromAnalytics = () => {
+    const today = getTodayDateString();
+    const nowTime = getCurrentTimeString();
+
+    if (selectedDate > today) {
+      alert('Cannot log mood for a future date.');
+      return;
+    }
+    if (selectedDate === today && selectedTime > nowTime) {
+      alert(`Cannot log mood for a future time. Current time is ${nowTime}.`);
+      return;
+    }
+
     logMood(selectedMood, note.trim() || undefined, selectedDate, selectedTime);
     setNote('');
     setSelectedTime(getCurrentTimeString());
   };
+
+  const todayStr = getTodayDateString();
+  const maxTime = selectedDate === todayStr ? getCurrentTimeString() : undefined;
 
   return (
     <div className="space-y-8">
@@ -147,10 +167,10 @@ export const Analytics: React.FC = () => {
 
       {/* Main Grid: Left Calendar & Quick Logger (5 Cols) / Right Insights & Trend Graph (7 Cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
+
         {/* LEFT COLUMN (5 Cols): Calendar + Quick Mood Logger */}
         <div className="lg:col-span-5 space-y-6">
-          
+
           {/* Calendar Widget (No Emojis, Clean Dot Indicators) */}
           <div className="clay-card p-4 sm:p-6 rounded-3xl bg-[var(--bg-card)] border-3 border-[var(--border)] space-y-3">
             <div className="flex items-center justify-between border-b-2 border-[var(--border)] pb-3">
@@ -186,6 +206,7 @@ export const Analytics: React.FC = () => {
                 </label>
                 <input
                   type="date"
+                  max={todayStr}
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
                   className="w-full bg-[var(--bg-cream)] text-[var(--text)] px-3 py-1.5 rounded-xl text-xs font-bold border-2 border-[var(--border)] shadow-[1.5px_1.5px_0px_0px_var(--border)] focus:outline-none cursor-pointer"
@@ -198,6 +219,7 @@ export const Analytics: React.FC = () => {
                 </label>
                 <input
                   type="time"
+                  max={maxTime}
                   value={selectedTime}
                   onChange={(e) => setSelectedTime(e.target.value)}
                   className="w-full bg-[var(--bg-cream)] text-[var(--text)] px-3 py-1.5 rounded-xl text-xs font-bold border-2 border-[var(--border)] shadow-[1.5px_1.5px_0px_0px_var(--border)] focus:outline-none cursor-pointer"
@@ -228,7 +250,7 @@ export const Analytics: React.FC = () => {
 
         {/* RIGHT COLUMN (7 Cols): Mood Insights & Selected Date Graph */}
         <div className="lg:col-span-7 space-y-6">
-          
+
           {/* Top Row: Weekly Average & Monthly Average Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="clay-card p-5 rounded-3xl border-3 border-[var(--border)] bg-[var(--accent-mint)] flex items-center gap-4">
@@ -291,25 +313,25 @@ export const Analytics: React.FC = () => {
                       <stop offset="95%" stopColor="#A7F3D0" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
-                  <XAxis 
-                    dataKey="time" 
-                    tickLine={false} 
-                    axisLine={false} 
-                    tick={{ fontSize: 11, fill: '#1E293B', fontWeight: 'bold' }} 
+                  <XAxis
+                    dataKey="time"
+                    tickLine={false}
+                    axisLine={false}
+                    tick={{ fontSize: 11, fill: axisTickColor, fontWeight: 'bold' }}
                   />
-                  <YAxis 
-                    domain={[1, 10]} 
-                    tickLine={false} 
-                    axisLine={false} 
-                    tick={{ fontSize: 11, fill: '#1E293B', fontWeight: 'bold' }} 
+                  <YAxis
+                    domain={[1, 10]}
+                    tickLine={false}
+                    axisLine={false}
+                    tick={{ fontSize: 11, fill: axisTickColor, fontWeight: 'bold' }}
                   />
                   <Tooltip
                     content={({ active, payload }) => {
                       if (active && payload && payload.length) {
                         const item = payload[0].payload;
                         return (
-                          <div className="clay-card px-3 py-2 rounded-xl text-xs bg-white border-2 border-[var(--border)] shadow-[3px_3px_0px_0px_var(--border)] font-black">
-                            <p className="flex items-center gap-1.5 text-[var(--text)]">
+                          <div className="clay-card px-3 py-2 rounded-xl text-xs bg-[var(--bg-card)] text-[var(--text)] border-2 border-[var(--border)] shadow-[3px_3px_0px_0px_var(--border)] font-black">
+                            <p className="flex items-center gap-1.5">
                               <span className="text-base">{item.emoji}</span>
                               <span>{item.label}</span>
                             </p>
@@ -320,13 +342,13 @@ export const Analytics: React.FC = () => {
                       return null;
                     }}
                   />
-                  <Area 
-                    type="monotone" 
-                    dataKey="score" 
-                    stroke="#1E293B" 
-                    strokeWidth={3} 
-                    fillOpacity={1} 
-                    fill="url(#selectedDateGradient)" 
+                  <Area
+                    type="monotone"
+                    dataKey="score"
+                    stroke={chartStrokeColor}
+                    strokeWidth={3}
+                    fillOpacity={1}
+                    fill="url(#selectedDateGradient)"
                   />
                 </AreaChart>
               </ResponsiveContainer>

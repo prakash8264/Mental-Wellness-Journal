@@ -3,11 +3,16 @@ import { FALLBACK_QUOTES } from '@/constants/quotes';
 
 export const quoteService = {
   async getRandomQuote(): Promise<Quote> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
+
     try {
-      // Fetch via raw CORS proxy or fallback if network unavailable
+      // Fetch via raw CORS proxy with 2-second timeout signal
       const response = await fetch('https://api.allorigins.win/raw?url=https://zenquotes.io/api/random', {
         cache: 'no-cache',
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
       
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -25,7 +30,8 @@ export const quoteService = {
       
       return this.getRandomFallbackQuote();
     } catch {
-      // Graceful fallback to offline curated quotes
+      clearTimeout(timeoutId);
+      // Fallback to curated offline quotes if network errors or times out (>2s)
       return this.getRandomFallbackQuote();
     }
   },

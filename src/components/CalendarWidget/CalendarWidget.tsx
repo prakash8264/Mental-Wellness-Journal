@@ -9,14 +9,21 @@ import { ROUTES } from '@/constants/routes';
 interface CalendarWidgetProps {
   onSelectDate?: (dateStr: string) => void;
   compact?: boolean;
+  readOnly?: boolean;
 }
 
-export const CalendarWidget: React.FC<CalendarWidgetProps> = ({ onSelectDate, compact = false }) => {
+export const CalendarWidget: React.FC<CalendarWidgetProps> = ({ 
+  onSelectDate, 
+  compact = false,
+  readOnly = false
+}) => {
   const navigate = useNavigate();
   const { entries } = useJournal();
   const { moodLogs } = useMood();
 
   const handleDateClick = (value: Date) => {
+    if (readOnly) return;
+
     const year = value.getFullYear();
     const month = String(value.getMonth() + 1).padStart(2, '0');
     const day = String(value.getDate()).padStart(2, '0');
@@ -42,27 +49,21 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({ onSelectDate, co
     const day = String(date.getDate()).padStart(2, '0');
     const dateStr = `${year}-${month}-${day}`;
 
-    const hasMoods = moodLogs.some((m) => m.date === dateStr);
-    const hasJournal = entries.some((e) => e.date === dateStr);
+    const hasActivity = moodLogs.some((m) => m.date === dateStr) || entries.some((e) => e.date === dateStr);
 
-    if (!hasMoods && !hasJournal) return null;
+    if (!hasActivity) return null;
 
     return (
-      <div className="flex items-center justify-center gap-1 mt-1">
-        {hasMoods && (
-          <span className="w-2 h-2 rounded-full bg-[var(--primary)] border border-[var(--border)]" title="Mood logged" />
-        )}
-        {hasJournal && (
-          <span className="w-2 h-2 rounded-full bg-[var(--cta)] border border-[var(--border)]" title="Journal entry logged" />
-        )}
+      <div className="flex items-center justify-center mt-1">
+        <span className="w-2 h-2 rounded-full bg-[var(--cta)] border border-[var(--border)]" title="Activity logged" />
       </div>
     );
   };
 
   return (
-    <div className={`clay-card rounded-3xl bg-[var(--bg-card)] border-3 border-[var(--border)] ${compact ? 'p-4' : 'p-6 sm:p-8'}`}>
+    <div className={`clay-card rounded-3xl bg-[var(--bg-card)] border-3 border-[var(--border)] ${compact ? 'p-4' : 'p-6 sm:p-8'} ${readOnly ? '[&_.react-calendar__tile]:cursor-default' : ''}`}>
       <Calendar
-        onClickDay={handleDateClick}
+        onClickDay={readOnly ? undefined : handleDateClick}
         tileContent={tileContent}
         prev2Label={null}
         next2Label={null}

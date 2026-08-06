@@ -35,11 +35,26 @@ export const MoodLogModal: React.FC<MoodLogModalProps> = ({
   const dateMoods = getMoodsByDate(selectedDate);
 
   const handleLogMood = () => {
+    const today = getTodayDateString();
+    const nowTime = getCurrentTimeString();
+
+    if (selectedDate > today) {
+      alert('Cannot log mood for a future date.');
+      return;
+    }
+    if (selectedDate === today && selectedTime > nowTime) {
+      alert(`Cannot log mood for a future time. Current time is ${nowTime}.`);
+      return;
+    }
+
     logMood(selectedMood, note.trim() || undefined, selectedDate, selectedTime);
     setNote('');
     // Refresh current time for next log
     setSelectedTime(getCurrentTimeString());
   };
+
+  const todayStr = getTodayDateString();
+  const maxTime = selectedDate === todayStr ? getCurrentTimeString() : undefined;
 
   return (
     <Modal
@@ -72,6 +87,7 @@ export const MoodLogModal: React.FC<MoodLogModalProps> = ({
               <div className="relative">
                 <input
                   type="date"
+                  max={todayStr}
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
                   className="w-full bg-[var(--bg-card)] text-[var(--text)] px-3 py-2 rounded-xl text-xs font-bold border-2 border-[var(--border)] shadow-[2px_2px_0px_0px_var(--border)] focus:outline-none cursor-pointer"
@@ -86,6 +102,7 @@ export const MoodLogModal: React.FC<MoodLogModalProps> = ({
               <div className="relative">
                 <input
                   type="time"
+                  max={maxTime}
                   value={selectedTime}
                   onChange={(e) => setSelectedTime(e.target.value)}
                   className="w-full bg-[var(--bg-card)] text-[var(--text)] px-3 py-2 rounded-xl text-xs font-bold border-2 border-[var(--border)] shadow-[2px_2px_0px_0px_var(--border)] focus:outline-none cursor-pointer"
