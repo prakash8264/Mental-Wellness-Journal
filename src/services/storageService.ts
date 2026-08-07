@@ -1,12 +1,12 @@
 import { JournalEntry, MoodLog, AppSettings, ThemeMode, Quote } from '@/types';
 
 const KEYS = {
-  JOURNAL_ENTRIES: 'serene_journal_entries',
-  MOOD_LOGS: 'serene_mood_logs',
-  THEME: 'serene_theme',
-  SETTINGS: 'serene_settings',
-  FAVOURITE_QUOTES: 'serene_favourite_quotes',
-  LAST_PAGE: 'serene_last_page',
+  JOURNAL_ENTRIES: 'journey_journal_entries',
+  MOOD_LOGS: 'journey_mood_logs',
+  THEME: 'journey_theme',
+  SETTINGS: 'journey_settings',
+  FAVOURITE_QUOTES: 'journey_favourite_quotes',
+  LAST_PAGE: 'journey_last_page',
 };
 
 const DEFAULT_SETTINGS: AppSettings = {

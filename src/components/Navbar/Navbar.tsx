@@ -35,7 +35,7 @@ export const Navbar: React.FC = () => {
             </div>
             <div>
               <span className="text-xl font-black text-[var(--text)] font-heading tracking-tight block leading-none">
-                Serene
+                Journey
               </span>
               <span className="text-[10px] text-[var(--text-muted)] font-black uppercase tracking-wider">
                 Mindfulness
