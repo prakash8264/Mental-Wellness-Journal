@@ -9,7 +9,7 @@ export const MainLayout: React.FC = () => {
   const outlet = useOutlet();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--bg-cream)] text-[var(--text)] transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-(--bg-cream) text-(--text) transition-colors duration-300">
       {/* Top Floating Navbar (Matches LearnHub screenshot) */}
       <Navbar />
 
