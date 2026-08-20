@@ -40,7 +40,14 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <motion.button
       type="button"
-      className={twMerge(clsx(baseStyles, sizeStyles[size], variantStyles[variant], className))}
+      className={twMerge(
+        clsx(
+          baseStyles,
+          sizeStyles[size],
+          variantStyles[variant],
+          className
+        )
+      )}
       {...props}
     >
       {icon && iconPosition === 'left' && <span className="text-lg">{icon}</span>}

@@ -14,7 +14,7 @@ export const MainLayout: React.FC = () => {
       <Navbar />
 
       {/* Main Content Container */}
-      <div className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 pb-24 lg:pb-12">
+      <div className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 pb-24 min-[860px]:pb-12">
         <main className="w-full h-full">
           <AnimatePresence mode="wait">
             <motion.div

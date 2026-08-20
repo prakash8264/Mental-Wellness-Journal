@@ -44,7 +44,7 @@ export const Navbar: React.FC = () => {
           </NavLink>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden min-[860px]:flex items-center gap-6">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path || (link.path !== '/' && location.pathname.startsWith(link.path));
 

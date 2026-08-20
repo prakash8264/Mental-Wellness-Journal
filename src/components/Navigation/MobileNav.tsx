@@ -19,7 +19,7 @@ export const MobileNav: React.FC = () => {
   const location = useLocation();
 
   return (
-    <nav className="lg:hidden fixed bottom-3 left-3 right-3 z-40">
+    <nav className="min-[860px]:hidden fixed bottom-3 left-3 right-3 z-40">
       <div className="clay-card p-2 flex items-center justify-around max-w-md mx-auto bg-[var(--bg-card)] border-3 border-[var(--border)] shadow-[4px_4px_0px_0px_var(--border)] rounded-2xl">
         {mobileNavItems.map((item) => {
           const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
